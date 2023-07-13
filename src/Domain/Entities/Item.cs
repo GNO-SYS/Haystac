@@ -31,12 +31,14 @@ public class Item : BaseEntity
     /// List of <see cref="Link"/> objects to resources and related URLs
     /// </summary>
     [JsonPropertyName("links")]
+    [Column(TypeName = "jsonb")]
     public List<Link> Links { get; set; } = new();
 
     /// <summary>
     /// A dictionary of additional metadata for the <see cref="Item"/>
     /// </summary>
     [JsonPropertyName("assets")]
+    [Column(TypeName = "jsonb")]
     public Dictionary<string, Asset> Assets { get; set; } = new();
 
     /// <summary>

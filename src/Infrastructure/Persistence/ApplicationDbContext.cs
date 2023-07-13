@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Collection> Collections => Set<Collection>();
     public DbSet<Item> Items => Set<Item>();
+    public DbSet<Client> Clients => Set<Client>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
