@@ -17,6 +17,11 @@ public class ItemDto
     [JsonPropertyName("id")]
     public string Identifier { get; set; } = string.Empty;
 
+    //< TODO - How to serialize the Geometry object as required
+
+    [JsonPropertyName("bbox")]
+    public List<double> BoundingBox { get; set; } = new();
+
     [JsonPropertyName("properties")]
     public Dictionary<string, string> Properties { get; set; } = new();
 

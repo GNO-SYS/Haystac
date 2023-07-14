@@ -1,10 +1,18 @@
-﻿namespace Haystac.Domain.Entities;
+﻿using NetTopologySuite.Geometries;
+
+namespace Haystac.Domain.Entities;
 
 //< See: https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md
 [Table("Items")]
 public class Item : BaseStacEntity
 {
     public const string DateTimeField = "datetime";
+
+    /// <summary>
+    /// Polygonal geometry describing the boundaries of the <see cref="Item"/> entity
+    /// </summary>
+    [Column(TypeName = "geography (polygon)")]
+    public Polygon Geometry { get; set; } = null!;
 
     /// <summary>
     /// Key-value collection of additional metadata - only required field is 'datetime'
