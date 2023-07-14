@@ -6,8 +6,7 @@ public abstract class BaseEntity
     /// [Primary Key] The UUID associated with the entity
     /// </summary>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [JsonPropertyName("uuid")]
-    public Guid Uuid { get; set; }
+    public Guid Id { get; set; }
 
     private readonly List<BaseEvent> _domainEvents = new();
 

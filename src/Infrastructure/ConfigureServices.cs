@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 using Haystac.Application.Common.Interfaces;
 using Haystac.Infrastructure.Persistence;
@@ -11,9 +12,15 @@ public static class ConfigureServices
     {
         //< TODO - Add transient services
 
-        //< TODO - Add actual NPGSQL DB connection & configurration
+        var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
+        datasourceBuilder.UseNetTopologySuite();
+        var datasource = datasourceBuilder.Build();
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(datasource, o => o.UseNetTopologySuite()));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<ApplicationDbContextInitializer>();
 
         //< TODO - Add Identity & Auth
 

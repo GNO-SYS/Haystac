@@ -23,7 +23,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        //builder.HasPostgresExtension("postgis"); TODO - Enable this once NPGSQL is added
+        builder.HasPostgresExtension("postgis");
 
         base.OnModelCreating(builder);
     }

@@ -1,53 +1,36 @@
 ﻿namespace Haystac.Domain.Entities;
 
-public class Item : BaseEntity
+//< See: https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md
+[Table("Items")]
+public class Item : BaseStacEntity
 {
-    /// <summary>
-    /// Type of the GeoJSON object - must always be set to 'Feature'
-    /// </summary>
-    [JsonPropertyName("type")]
-    public string Type { get; } = "Feature";
+    public const string DateTimeField = "datetime";
 
     /// <summary>
-    /// The STAC version this <see cref="Item"/> implements
+    /// Key-value collection of additional metadata - only required field is 'datetime'
     /// </summary>
-    [JsonPropertyName("stac_version")]
-    public string StacVersion { get; set; } = string.Empty;
-
-    /// <summary>
-    /// A list of STAC extensions this <see cref="Item"/> implements
-    /// </summary>
-    [JsonPropertyName("stac_extensions")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>? Extensions { get; set; }
-
-    /// <summary>
-    /// The provider's identifier for the <see cref="Item"/> - should be unique within the <see cref="Entities.Collection"/> that contains the <see cref="Item"/>
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; set; } = string.Empty;
+    [Column(TypeName = "jsonb")]
+    public Dictionary<string, string> Properties { get; set; } = new();
 
     /// <summary>
     /// List of <see cref="Link"/> objects to resources and related URLs
     /// </summary>
-    [JsonPropertyName("links")]
     [Column(TypeName = "jsonb")]
     public List<Link> Links { get; set; } = new();
 
     /// <summary>
     /// A dictionary of additional metadata for the <see cref="Item"/>
     /// </summary>
-    [JsonPropertyName("assets")]
     [Column(TypeName = "jsonb")]
     public Dictionary<string, Asset> Assets { get; set; } = new();
 
     /// <summary>
     /// The 'id' of the <see cref="Entities.Collection"/> this <see cref="Item"/> belongs to, if allowed
     /// </summary>
-    [JsonPropertyName("collection")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? CollectionId { get; set; } = string.Empty;
+    public string CollectionId { get; set; } = string.Empty;
 
-    [JsonIgnore]
+    /// <summary>
+    /// The <see cref="Entities.Collection"/> entity that this <see cref="Item"/> belongs to
+    /// </summary>
     public Collection Collection { get; set; } = null!;
 }
