@@ -8,7 +8,6 @@ public static class ConfigureServices
     {
         //< Add any services
 
-
         return services;
     }
 }

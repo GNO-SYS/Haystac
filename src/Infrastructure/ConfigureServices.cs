@@ -12,6 +12,8 @@ public static class ConfigureServices
     {
         //< TODO - Add transient services
 
+        //< TODO - Consider injecting an in-memory DB for testing
+
         var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
         datasourceBuilder.UseNetTopologySuite();
         var datasource = datasourceBuilder.Build();

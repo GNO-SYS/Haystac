@@ -1,4 +1,5 @@
 ﻿using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 
 namespace Haystac.Domain.Entities;
 
@@ -8,10 +9,14 @@ public class Item : BaseStacEntity
 {
     public const string DateTimeField = "datetime";
 
+    //< TODO - Technically the spec allows for non-polygonal geometry types in Items, do we care & want to support those?
+    //<      - Would suggest that instead we store a 'jsonb' column of whatever geometry we want, as well as a 2D geographic polygon bounding box
+    //<      - The 2D polygonal geometry would get ignored when returned to the end user, but would be used for spatial queries
     /// <summary>
     /// Polygonal geometry describing the boundaries of the <see cref="Item"/> entity
     /// </summary>
     [Column(TypeName = "geography (polygon)")]
+    [JsonConverter(typeof(GeoJsonConverterFactory))]
     public Polygon Geometry { get; set; } = null!;
 
     /// <summary>
