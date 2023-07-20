@@ -11,7 +11,8 @@ public record GetItemByIdentifierQuery : IRequest<ItemDto>
     public string Identifier { get; set; } = string.Empty;
 }
 
-public class GetItemByIdentifierQueryHandler : IRequestHandler<GetItemByIdentifierQuery, ItemDto>
+public class GetItemByIdentifierQueryHandler 
+    : IRequestHandler<GetItemByIdentifierQuery, ItemDto>
 {
     private readonly IApplicationDbContext _context;
 
@@ -20,10 +21,12 @@ public class GetItemByIdentifierQueryHandler : IRequestHandler<GetItemByIdentifi
         _context = context;
     }
 
-    public async Task<ItemDto> Handle(GetItemByIdentifierQuery query, CancellationToken cancellationToken)
+    public async Task<ItemDto> Handle(GetItemByIdentifierQuery query,
+        CancellationToken cancellationToken)
     {
-        var entity = await _context.Items.Where(i => i.Identifier == query.Identifier && i.CollectionId == query.Collection)
-                                         .FirstOrDefaultAsync();
+        var entity = await _context.Items.Where(i => i.Identifier == query.Identifier 
+                                                  && i.CollectionId == query.Collection)
+                                         .FirstOrDefaultAsync(cancellationToken);
 
         if (entity == null) throw new NotFoundException(nameof(Item), query.Identifier);
 

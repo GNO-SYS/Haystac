@@ -8,10 +8,13 @@ global using System.Text.Json.Serialization;
 global using System.Globalization;
 
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Logging;
 
 global using MediatR;
 
 global using Haystac.Domain.Entities;
+global using Haystac.Domain.Events;
 
+global using Haystac.Application.Common.Exceptions;
 global using Haystac.Application.Common.Interfaces;
 global using Haystac.Application.Common.Models;

@@ -18,6 +18,10 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Guid>
     {
         var entity = command.Dto.ToItem();
 
+        //< TODO - Verify the collection exists first, then create the entity
+
+        entity.AddDomainEvent(new ItemAddedEvent(entity));
+
         _context.Items.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
