@@ -1,4 +1,6 @@
 ﻿using Haystac.Domain.ValueObjects;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 
 namespace Haystac.Application.Common.Models;
 
@@ -17,13 +19,15 @@ public class ItemDto
     [JsonPropertyName("id")]
     public string Identifier { get; set; } = string.Empty;
 
-    //< TODO - How to serialize the Geometry object as required
+    [JsonPropertyName("geometry")]
+    [JsonConverter(typeof(GeoJsonConverterFactory))]
+    public Polygon Geometry { get; set; } = null!;
 
     [JsonPropertyName("bbox")]
     public List<double> BoundingBox { get; set; } = new();
 
     [JsonPropertyName("properties")]
-    public Dictionary<string, string> Properties { get; set; } = new();
+    public Dictionary<string, object> Properties { get; set; } = new();
 
     [JsonPropertyName("links")]
     public List<Link> Links { get; set; } = new();

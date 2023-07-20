@@ -1,5 +1,4 @@
 ﻿using NetTopologySuite.Geometries;
-using NetTopologySuite.IO.Converters;
 
 namespace Haystac.Domain.Entities;
 
@@ -16,14 +15,13 @@ public class Item : BaseStacEntity
     /// Polygonal geometry describing the boundaries of the <see cref="Item"/> entity
     /// </summary>
     [Column(TypeName = "geography (polygon)")]
-    [JsonConverter(typeof(GeoJsonConverterFactory))]
     public Polygon Geometry { get; set; } = null!;
 
     /// <summary>
     /// Key-value collection of additional metadata - only required field is 'datetime'
     /// </summary>
     [Column(TypeName = "jsonb")]
-    public Dictionary<string, string> Properties { get; set; } = new();
+    public Dictionary<string, object> Properties { get; set; } = new();
 
     /// <summary>
     /// List of <see cref="Link"/> objects to resources and related URLs

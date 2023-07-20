@@ -1,0 +1,67 @@
+ {
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "PGE_2_46.las",
+    "properties": {
+        "major_version": 1,
+        "minor_version": 2,
+        "point_record_format": 3,
+        "point_count": 3821680,
+        "creation_date": "2023-05-24",
+        "min_gpstime": 154608.97900390625,
+        "max_gpstime": 156833.15478515625,
+        "start_datetime": "2011-09-15T20:43:12.979004",
+        "end_datetime": "2011-09-15T21:20:17.154785",
+        "datetime": "2011-09-15T20:43:12.979004Z"
+    },
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -120.83773023659782,
+                    35.365036448132706
+                ],
+                [
+                    -120.83773023659782,
+                    35.367785138286855
+                ],
+                [
+                    -120.83111320847193,
+                    35.367785138286855
+                ],
+                [
+                    -120.83111320847193,
+                    35.365036448132706
+                ],
+                [
+                    -120.83773023659782,
+                    35.365036448132706
+                ]
+            ]
+        ]
+    },
+    "links": [],
+    "assets": {
+        "laz": {
+            "href": "s3://stac-demo-public/client/PGE_2_46_data/Processed/PGE_2_46.las",
+            "type": "lidar/laz"
+        },
+        "laz_ground": {
+            "href": "",
+            "type": "lidar/laz"
+        },
+        "Lidar_Viewer": {
+            "href": "https://stac-demo-public.s3.amazonaws.com/client/PGE_2_46_data/Processed/Potree/PGE_2_46//PGE_2_46.html",
+            "type": "application/html"
+        }
+    },
+    "bbox": [
+        -120.83773023659782,
+        35.365036448132706,
+        -120.83111320847193,
+        35.367785138286855
+    ],
+    "stac_extensions": [],
+    "collection": "pgelidarclassification"
+}

@@ -14,3 +14,4 @@ global using MediatR;
 global using Haystac.Domain.Entities;
 
 global using Haystac.Application.Common.Interfaces;
+global using Haystac.Application.Common.Models;
