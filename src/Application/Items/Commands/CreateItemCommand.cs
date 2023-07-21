@@ -5,7 +5,8 @@ public record CreateItemCommand : IRequest<Guid>
     public ItemDto Dto { get; set; } = null!;
 }
 
-public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Guid>
+public class CreateItemCommandHandler 
+    : IRequestHandler<CreateItemCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 

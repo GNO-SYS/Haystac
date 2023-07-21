@@ -5,7 +5,8 @@ public record CreateCollectionCommand : IRequest<Guid>
     public CollectionDto Dto { get; set; } = null!;
 }
 
-public class CreateCollectionCommandHandler : IRequestHandler<CreateCollectionCommand, Guid>
+public class CreateCollectionCommandHandler 
+    : IRequestHandler<CreateCollectionCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
