@@ -51,7 +51,7 @@ public static class ItemDtoExtensions
             Properties = item.Properties,
             Links = item.Links,
             Assets = item.Assets,
-            Collection = item.CollectionId
+            Collection = item.CollectionIdentifier
         };
     }
 
@@ -65,7 +65,7 @@ public static class ItemDtoExtensions
             Properties = dto.Properties,
             Links = dto.Links,
             Assets = dto.Assets,
-            CollectionId = dto.Collection
+            CollectionIdentifier = dto.Collection
         };
     }
 }

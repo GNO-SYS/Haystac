@@ -8,6 +8,11 @@ public class Item : BaseStacEntity
 {
     public const string DateTimeField = "datetime";
 
+    /// <summary>
+    /// [Foreign Key] The UUID of the associated <see cref="Entities.Collection"/> entity
+    /// </summary>
+    public Guid CollectionUuid { get; set;}
+
     //< TODO - Technically the spec allows for non-polygonal geometry types in Items, do we care & want to support those?
     //<      - Would suggest that instead we store a 'jsonb' column of whatever geometry we want, as well as a 2D geographic polygon bounding box
     //<      - The 2D polygonal geometry would get ignored when returned to the end user, but would be used for spatial queries
@@ -36,9 +41,9 @@ public class Item : BaseStacEntity
     public Dictionary<string, Asset> Assets { get; set; } = new();
 
     /// <summary>
-    /// The 'id' of the <see cref="Entities.Collection"/> this <see cref="Item"/> belongs to, if allowed
+    /// The 'provider-supplied identifier' of the <see cref="Entities.Collection"/> this <see cref="Item"/> belongs to, if allowed
     /// </summary>
-    public string CollectionId { get; set; } = string.Empty;
+    public string CollectionIdentifier { get; set; } = string.Empty;
 
     /// <summary>
     /// The <see cref="Entities.Collection"/> entity that this <see cref="Item"/> belongs to

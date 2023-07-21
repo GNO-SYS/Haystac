@@ -8,6 +8,6 @@ public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
     {
         builder.HasMany(c => c.Items)
                .WithOne(i => i.Collection)
-               .HasForeignKey(i => i.CollectionId);
+               .HasForeignKey(i => i.CollectionUuid);
     }
 }

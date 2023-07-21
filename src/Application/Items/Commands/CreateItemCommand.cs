@@ -18,7 +18,12 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Guid>
     {
         var entity = command.Dto.ToItem();
 
-        //< TODO - Verify the collection exists first, then create the entity
+        var collec = await _context.Collections
+            .FirstOrDefaultAsync(c => c.Identifier == entity.CollectionIdentifier, cancellationToken);
+
+        if (collec is null) throw new NotFoundException(nameof(Collection), entity.CollectionIdentifier);
+
+        entity.CollectionUuid = collec.Id;
 
         entity.AddDomainEvent(new ItemAddedEvent(entity));
 

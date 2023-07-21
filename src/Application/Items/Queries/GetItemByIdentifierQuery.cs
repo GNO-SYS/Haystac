@@ -25,7 +25,7 @@ public class GetItemByIdentifierQueryHandler
         CancellationToken cancellationToken)
     {
         var entity = await _context.Items.Where(i => i.Identifier == query.Identifier 
-                                                  && i.CollectionId == query.Collection)
+                                                  && i.CollectionIdentifier == query.Collection)
                                          .FirstOrDefaultAsync(cancellationToken);
 
         if (entity == null) throw new NotFoundException(nameof(Item), query.Identifier);

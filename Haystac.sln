@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "src\Console\Cons
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA9C86C6-B48A-407E-9D72-F65DA92219CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haystac.UnitTests", "test\Haystac.UnitTests\Haystac.UnitTests.csproj", "{6D08C524-BCCF-464D-987B-A4FC6831804B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Haystac.UnitTests", "test\Haystac.UnitTests\Haystac.UnitTests.csproj", "{6D08C524-BCCF-464D-987B-A4FC6831804B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\WebApi\WebApi.csproj", "{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6D08C524-BCCF-464D-987B-A4FC6831804B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D08C524-BCCF-464D-987B-A4FC6831804B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D08C524-BCCF-464D-987B-A4FC6831804B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{770A1E41-7FF4-47C8-AFFA-8E952EF9F2AA} = {62490DF9-C257-4A10-A66E-68E18434B4FC}
 		{8EBCD920-72FA-4CEE-84B3-3A589F7ED75F} = {61AD0CEE-B622-426A-9FE6-396331C62F91}
 		{6D08C524-BCCF-464D-987B-A4FC6831804B} = {FA9C86C6-B48A-407E-9D72-F65DA92219CC}
+		{9FFA2F17-5F4E-43EC-8144-EF522BAA2A1C} = {61AD0CEE-B622-426A-9FE6-396331C62F91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5CCB47D2-E5B3-4D44-9775-22733D9CBF0F}
