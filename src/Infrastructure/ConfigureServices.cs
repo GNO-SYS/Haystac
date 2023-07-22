@@ -2,6 +2,8 @@
 using Npgsql;
 
 using Haystac.Application.Common.Interfaces;
+
+using Haystac.Infrastructure.Services;
 using Haystac.Infrastructure.Persistence;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,7 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         //< TODO - Add transient services
+        services.AddTransient<IDateTimeService, DateTimeService>();
 
         //< TODO - Consider injecting an in-memory DB for testing
 

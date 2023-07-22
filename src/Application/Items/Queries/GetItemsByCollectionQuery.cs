@@ -16,9 +16,13 @@ public class GetItemsByCollectionQueryHandler : IRequestHandler<GetItemsByCollec
     }
 
     public async Task<List<ItemDto>> Handle(GetItemsByCollectionQuery query, CancellationToken cancellationToken)
-    => await _context.Items
-                .Where(i => i.CollectionIdentifier == query.CollectionId)
-                .OrderBy(i => i.Identifier)
-                .Select(i => i.ToDto())
-                .ToListAsync(cancellationToken);
+    {
+        var collec = await _context.Collections.Where(c => c.Identifier == query.CollectionId)
+                                               .Include(c => c.Items)
+                                               .FirstOrDefaultAsync(cancellationToken);
+
+        if (collec == null) throw new NotFoundException(nameof(Collection), query.CollectionId);
+
+        return collec.Items.Select(i => i.ToDto()).ToList();
+    }
 }

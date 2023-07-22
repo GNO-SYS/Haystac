@@ -27,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Fixtures\pgelidarclassification.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Fixtures\stac_item.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

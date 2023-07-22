@@ -40,7 +40,7 @@ public class CollectionDto
 
     [JsonPropertyName("summaries")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Dictionary<string, object>? Summaries { get; set; } = new();
+    public Dictionary<string, object>? Summaries { get; set; }
 
     [JsonPropertyName("links")]
     public List<Link> Links { get; set; } = new();

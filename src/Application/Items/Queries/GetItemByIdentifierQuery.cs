@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Common.Exceptions;
-
-namespace Haystac.Application.Items.Queries;
+﻿namespace Haystac.Application.Items.Queries;
 
 public record GetItemByIdentifierQuery : IRequest<ItemDto>
 {
@@ -24,12 +22,16 @@ public class GetItemByIdentifierQueryHandler
     public async Task<ItemDto> Handle(GetItemByIdentifierQuery query,
         CancellationToken cancellationToken)
     {
-        var entity = await _context.Items.Where(i => i.Identifier == query.Identifier 
-                                                  && i.CollectionIdentifier == query.Collection)
-                                         .FirstOrDefaultAsync(cancellationToken);
+        var collec = await _context.Collections.Where(c => c.Identifier == query.Collection)
+                                               .Include(c => c.Items)
+                                               .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null) throw new NotFoundException(nameof(Item), query.Identifier);
+        if (collec == null) throw new NotFoundException(nameof(Collection), query.Collection);
 
-        return entity.ToDto();
+        var item = collec.Items.FirstOrDefault(i => i.Identifier == query.Identifier);
+
+        if (item == null) throw new NotFoundException(nameof(Item), query.Identifier);
+
+        return item.ToDto();
     }
 }

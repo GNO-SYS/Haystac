@@ -3,10 +3,10 @@
 public class Extent : ValueObject
 {
     [JsonPropertyName("spatial")]
-    SpatialExtent Spatial { get; set; } = new();
+    public SpatialExtent Spatial { get; set; } = new();
 
     [JsonPropertyName("temporal")]
-    TemporalExtent Temporal { get; set; } = new();
+    public TemporalExtent Temporal { get; set; } = new();
 
     public void UpdateToInclude(Item item)
     {

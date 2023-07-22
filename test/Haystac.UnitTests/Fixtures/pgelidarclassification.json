@@ -1,0 +1,46 @@
+{
+  "type": "Collection",
+  "id": "pgelidarclassification",
+  "stac_version": "1.0.0",
+  "description": "Data derived from PGE public data set 2 46 s.  The datasets include a Digital Terrain Model (DTM), a Digital Surface Model (DSM), and a colorized point cloud (.laz file and potree converted folder/html).",
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://stac.gno-sys.com/collections/pgelidarclassification"
+    },
+    {
+      "rel": "parent",
+      "href": "https://stac.gno-sys.com/"
+    },
+    {
+      "rel": "root",
+      "href": "https://stac.gno-sys.com/"
+    },
+    {
+      "rel": "items",
+      "href": "https://stac.gno-sys.com/collections/pgelidarclassification/items"
+    }
+  ],
+  "title": "PGE Lidar Classification",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -120.84,
+          35.36,
+          -120.82,
+          35.37
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2023-07-18T11:49:05.274387Z",
+          "2023-07-18T11:49:05.274387Z"
+        ]
+      ]
+    }
+  },
+  "license": "proprietary"
+}
