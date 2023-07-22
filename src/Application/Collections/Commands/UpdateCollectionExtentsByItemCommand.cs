@@ -23,6 +23,9 @@ public class UpdateCollectionExtentsByItemCommandHandler : IRequestHandler<Updat
 
         if (entity == null) throw new NotFoundException(nameof(Collection), command.CollectionId);
 
+        //< Consider re-working this, simply re-create the bounds by looping through all associated items
+        //< Turn it into an ad-hoc command that the user calls when they want, rather than per-Item
+
         entity.Extent.UpdateToInclude(command.Item);
 
         await _context.SaveChangesAsync(cancellationToken);

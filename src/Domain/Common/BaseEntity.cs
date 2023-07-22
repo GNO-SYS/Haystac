@@ -2,6 +2,9 @@
 
 public abstract class BaseEntity
 {
+    //< TODO - Add the 'Identifier' column here, but Items have a composite key
+    //<      - that combines their identifier and their collection identifier, remove GUIDs
+
     /// <summary>
     /// [Primary Key] The UUID associated with the entity
     /// </summary>

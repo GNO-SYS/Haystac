@@ -1,27 +1,11 @@
-﻿using Haystac.Domain.ValueObjects;
-
-namespace Haystac.Application.Collections.Commands;
+﻿namespace Haystac.Application.Collections.Commands;
 
 public record UpdateCollectionCommand : IRequest
 {
     [JsonPropertyName("collection")]
-    public string Collection { get; set; } = string.Empty;
+    public string CollectionId { get; set; } = string.Empty;
 
-    [JsonPropertyName("new_collection_id")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? NewIdentifier { get; set; }
-
-    [JsonPropertyName("title")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Title { get; set; }
-
-    [JsonPropertyName("description")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("extent")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Extent? Extent { get; set; }
+    public CollectionDto Dto { get; set; } = null!;
 }
 
 public class UpdateCollectionCommandHandler : IRequestHandler<UpdateCollectionCommand>
@@ -35,15 +19,23 @@ public class UpdateCollectionCommandHandler : IRequestHandler<UpdateCollectionCo
 
     public async Task Handle(UpdateCollectionCommand command, CancellationToken cancellationToken)
     {
-        var entity = await _context.Collections.Where(c => c.Identifier == command.Collection)
+        var entity = await _context.Collections.Where(c => c.Identifier == command.CollectionId)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null) throw new NotFoundException(nameof(Collection), command.Collection);
+        if (entity == null) throw new NotFoundException(nameof(Collection), command.CollectionId);
 
-        if (command.NewIdentifier != null) entity.Identifier = command.NewIdentifier;
-        if (command.Title != null) entity.Title = command.Title;
-        if (command.Description != null) entity.Description = command.Description;
-        if (command.Extent != null) entity.Extent = command.Extent;
+        entity.StacVersion = command.Dto.StacVersion;
+        entity.Extensions = command.Dto.Extensions ?? entity.Extensions;
+        entity.Identifier = command.Dto.Identifier;
+        entity.Title = command.Dto.Title ?? entity.Title;
+        entity.Description = command.Dto.Description;
+        entity.Keywords = command.Dto.Keywords ?? entity.Keywords;
+        entity.License = command.Dto.License;
+        entity.Providers = command.Dto.Providers ?? entity.Providers;
+        entity.Extent = command.Dto.Extent;
+        entity.Summaries = command.Dto.Summaries ?? entity.Summaries;
+        entity.Links = command.Dto.Links;
+        entity.Assets = command.Dto.Assets ?? entity.Assets;
 
         await _context.SaveChangesAsync(cancellationToken);
     }

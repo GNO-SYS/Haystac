@@ -1,7 +1,7 @@
 ﻿namespace Haystac.Application.Items.Queries;
 
 public record GetItemsByCollectionWithPaginationQuery 
-    : IRequest<PaginatedList<Item>>
+    : IRequest<PaginatedList<ItemDto>>
 {
     public string CollectionId { get; set; } = string.Empty;
 
@@ -10,7 +10,7 @@ public record GetItemsByCollectionWithPaginationQuery
 }
 
 public class GetItemsByCollectionWithPaginationQueryHandler
-    : IRequestHandler<GetItemsByCollectionWithPaginationQuery, PaginatedList<Item>>
+    : IRequestHandler<GetItemsByCollectionWithPaginationQuery, PaginatedList<ItemDto>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -19,10 +19,11 @@ public class GetItemsByCollectionWithPaginationQueryHandler
         _context = context;
     }
 
-    public async Task<PaginatedList<Item>> Handle(GetItemsByCollectionWithPaginationQuery query,
+    public async Task<PaginatedList<ItemDto>> Handle(GetItemsByCollectionWithPaginationQuery query,
         CancellationToken cancellationToken)
         => await _context.Items
                 .Where(i => i.CollectionIdentifier == query.CollectionId)
                 .OrderBy(i => i.Identifier)
+                .Select(i => i.ToDto())
                 .ToPaginatedListAsync(query.PageNumber, query.PageSize);
 }
