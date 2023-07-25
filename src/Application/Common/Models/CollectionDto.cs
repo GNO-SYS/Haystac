@@ -1,4 +1,6 @@
-﻿using Haystac.Domain.ValueObjects;
+﻿using System.Text.Json;
+
+using Haystac.Domain.ValueObjects;
 
 namespace Haystac.Application.Common.Models;
 
@@ -48,6 +50,8 @@ public class CollectionDto
     [JsonPropertyName("assets")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Dictionary<string, Asset>? Assets { get; set; }
+
+    public override string ToString() => JsonSerializer.Serialize(this);
 }
 
 public static class CollectionDtoExtensions

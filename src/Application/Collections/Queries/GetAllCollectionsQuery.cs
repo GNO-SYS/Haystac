@@ -1,9 +1,9 @@
 ﻿namespace Haystac.Application.Collections.Queries;
 
-public record GetAllCollectionsQuery : IRequest<List<CollectionDto>> { }
+public record GetAllCollectionsQuery : IRequest<List<Collection>> { }
 
 public class GetAllCollectionsQueryHandler 
-    : IRequestHandler<GetAllCollectionsQuery, List<CollectionDto>> 
+    : IRequestHandler<GetAllCollectionsQuery, List<Collection>> 
 {
     private readonly IApplicationDbContext _context;
 
@@ -12,8 +12,8 @@ public class GetAllCollectionsQueryHandler
         _context = context;
     }
 
-    public async Task<List<CollectionDto>> Handle(GetAllCollectionsQuery request, CancellationToken cancellationToken)
+    public async Task<List<Collection>> Handle(GetAllCollectionsQuery request, CancellationToken cancellationToken)
         => await _context.Collections
-                         .Select(c => c.ToDto())
+                         .Include(c => c.Items)
                          .ToListAsync(cancellationToken);
 }

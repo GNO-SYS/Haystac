@@ -4,10 +4,20 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
 	<RootNamespace>Haystac.Console</RootNamespace>
-	<AssemblyName>Haystac.Console</AssemblyName>
+	<AssemblyName>Haystac</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />

@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Common.Models;
-
-namespace Haystac.Application.Common.Interfaces;
+﻿namespace Haystac.Application.Common.Interfaces;
 
 public interface IIdentityService
 {

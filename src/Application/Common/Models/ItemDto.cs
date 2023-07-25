@@ -37,6 +37,8 @@ public class ItemDto
 
     [JsonPropertyName("collection")]
     public string Collection { get; set; } = string.Empty;
+
+    public override string ToString() => JsonSerializer.Serialize(this);
 }
 
 public static class ItemDtoExtensions
@@ -51,7 +53,8 @@ public static class ItemDtoExtensions
             Properties = item.Properties,
             Links = item.Links,
             Assets = item.Assets,
-            Collection = item.CollectionIdentifier
+            Collection = item.CollectionIdentifier,
+            Geometry = item.Geometry
         };
     }
 
@@ -65,7 +68,8 @@ public static class ItemDtoExtensions
             Properties = dto.Properties,
             Links = dto.Links,
             Assets = dto.Assets,
-            CollectionIdentifier = dto.Collection
+            CollectionIdentifier = dto.Collection,
+            Geometry = dto.Geometry
         };
     }
 }
