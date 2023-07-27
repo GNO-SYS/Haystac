@@ -1,4 +1,5 @@
 ﻿using Haystac.Domain.ValueObjects;
+
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 

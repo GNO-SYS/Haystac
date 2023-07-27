@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-using Haystac.Domain.ValueObjects;
+﻿using Haystac.Domain.ValueObjects;
 
 namespace Haystac.Application.Common.Models;
 

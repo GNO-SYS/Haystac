@@ -26,7 +26,10 @@ public class CreateItemCommandHandler
 
         entity.CollectionUuid = collec.Id;
 
-        entity.AddDomainEvent(new ItemAddedEvent(entity));
+        collec.Extent.UpdateToInclude(entity);
+
+        //< Removed in favour of just updating the Collection since we already have it
+        //entity.AddDomainEvent(new ItemAddedEvent(entity));
 
         _context.Items.Add(entity);
 

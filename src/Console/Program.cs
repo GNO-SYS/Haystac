@@ -47,6 +47,10 @@ app.Configure(config =>
         branch.AddCommand<ItemAddCommand>("add")
               .WithDescription("Attempts to import a STAC Item into an existing STAC Collection from an input JSON file")
               .WithExample(new[] { "add", @"C:\_test\stac_item.json" });
+
+        branch.AddCommand<ItemDeleteCommand>("delete")
+              .WithDescription("Attempts to delete the given Item from the given Collection")
+              .WithExample(new[] { "delete", "CollectionName", "ItemName" });
     });
 
 });

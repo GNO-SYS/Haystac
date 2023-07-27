@@ -28,7 +28,15 @@ public class SpatialExtent : ValueObject
 
     public void UpdateExtents(Item item)
     {
-        //< TODO - Parse spatial extents from the Item.Geometry's bounding box, expand if maxima/minima change
+        var bounds = item.Geometry.EnvelopeInternal;
+        var currBounds = BoundingBox.First();
+        BoundingBox[0] = new List<double>
+        {
+            Math.Min(currBounds[0], bounds.MinX),
+            Math.Min(currBounds[1], bounds.MinY),
+            Math.Max(currBounds[2], bounds.MaxX),
+            Math.Max(currBounds[3], bounds.MaxY)
+        };
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

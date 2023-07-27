@@ -1,7 +1,5 @@
 ﻿using Haystac.Application.Common.Interfaces;
 
-using Haystac.Console.Services;
-
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
