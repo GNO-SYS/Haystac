@@ -18,10 +18,14 @@ public class DeleteCollectionCommandHandler : IRequestHandler<DeleteCollectionCo
     public async Task Handle(DeleteCollectionCommand command, CancellationToken cancellationToken)
     {
         var entity = await _context.Collections.Where(c => c.Identifier == command.CollectionId)
+                                               .Include(c => c.Items)
                                                .FirstOrDefaultAsync(cancellationToken);
 
         if (entity == null) throw new NotFoundException(nameof(Collection), command.CollectionId);
 
+        //< Remove all child Items
+        foreach (var item in entity.Items) _context.Items.Remove(item);
+        //< Remove the Collection itself
         _context.Collections.Remove(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
