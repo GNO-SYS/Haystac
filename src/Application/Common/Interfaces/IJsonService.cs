@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Common.Models;
-
-namespace Haystac.Console.Services;
+﻿namespace Haystac.Application.Common.Interfaces;
 
 public interface IJsonService
 {

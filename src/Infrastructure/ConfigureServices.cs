@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
 using Npgsql;
 
 using Haystac.Application.Common.Interfaces;
@@ -12,11 +15,10 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //< TODO - Add transient services
         services.AddTransient<IDateTimeService, DateTimeService>();
+        services.AddTransient<IJsonService, JsonService>();
 
         //< TODO - Consider injecting an in-memory DB for testing
-
         var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
         datasourceBuilder.UseNetTopologySuite();
         var datasource = datasourceBuilder.Build();
@@ -27,7 +29,27 @@ public static class ConfigureServices
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<ApplicationDbContextInitializer>();
 
-        //< TODO - Add Identity & Auth
+        services.AddCognitoIdentity();
+
+        //< TODO - May only need this for the API as CLI uses IAuthenticationService, consider making it optional
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = configuration["Cognito:Authority"];
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidIssuer = configuration["Cognito:Authority"],
+                ValidateLifetime = true,
+                LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
+                ValidateAudience = false
+            };
+        });
 
         return services;
     }

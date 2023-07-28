@@ -3,6 +3,4 @@
 public interface IUser
 {
     string? Id { get; }
-
-    Task<string?> GetIdAsync();
 }

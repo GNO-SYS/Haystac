@@ -12,5 +12,6 @@ global using Spectre.Console.Cli;
 
 global using Haystac.Domain.Entities;
 global using Haystac.Application.Common.Models;
+global using Haystac.Application.Common.Interfaces;
 
 global using Haystac.Console.Services;
