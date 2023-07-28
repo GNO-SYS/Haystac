@@ -43,7 +43,15 @@ public class ApplicationDbContextInitializer
 
     async Task TrySeedAsync()
     {
-        //< TODO - Seed with test data
+        //< Add the 'test' Client entity
+        _context.Clients.Add(new Client
+        {
+            Name = "TestClient",
+            ContactName = "Test",
+            ContactEmail = "test@client.com"
+        });
+
+        //< TODO - Any test collection/items for the 'test' Client
 
         await _context.SaveChangesAsync();
     }
