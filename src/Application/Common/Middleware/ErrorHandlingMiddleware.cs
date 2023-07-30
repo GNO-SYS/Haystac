@@ -28,7 +28,8 @@ public class ErrorHandlingMiddleware
             response.ContentType = "application/json";
             response.StatusCode = GetStatusCode(err);
 
-            var result = JsonSerializer.Serialize(new { message = err?.Message });
+            var errorMessage = GetErrorMessageJson(err);           
+            var result = JsonSerializer.Serialize(new { message = errorMessage });
             await response.WriteAsync(result);
         }
     }
@@ -42,6 +43,18 @@ public class ErrorHandlingMiddleware
             ForbiddenAccessException => (int)HttpStatusCode.Forbidden,
             ValidationException => (int)HttpStatusCode.BadRequest,
             _ => (int)HttpStatusCode.InternalServerError,
+        };
+    }
+
+    static string GetErrorMessageJson(Exception e)
+    {
+        return e switch
+        {
+            AppException 
+            or NotFoundException 
+            or ForbiddenAccessException 
+            or ValidationException => $"{e.Message}",
+            _ => "Internal server error",
         };
     }
 }
