@@ -4,9 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-using Haystac.Domain.Constants;
+using Haystac.Infrastructure.Identity;
 
-namespace Haystac.Infrastructure.Services;
+namespace Haystac.Infrastructure.Authentication;
 
 public class TestAuthSettings
 {
@@ -17,56 +17,29 @@ public class TestAuthSettings
     public string Issuer { get; init; } = string.Empty;
     public string Audience { get; init; } = string.Empty;
 
-    public SymmetricSecurityKey SecurityKey 
-        => new (Encoding.UTF8.GetBytes(Secret));
+    public SymmetricSecurityKey SecurityKey
+        => new(Encoding.UTF8.GetBytes(Secret));
 
-    public SigningCredentials SigningCredentials 
-        => new (SecurityKey, SecurityAlgorithms.HmacSha256);
-}
-
-record class TestUser
-{
-    public Guid Id { get; set; } = Guid.NewGuid();
-
-    public string UserName { get; set; } = string.Empty;
-
-    public string Password { get; set; } = string.Empty;
-
-    public ICollection<string> Roles { get; set; } = new HashSet<string>();
-
-    public ICollection<string> Policies { get; set; } = new HashSet<string>();
+    public SigningCredentials SigningCredentials
+        => new(SecurityKey, SecurityAlgorithms.HmacSha256);
 }
 
 public class TestAuthenticationService : IAuthenticationService
 {
     private readonly TestAuthSettings _settings;
+    private readonly IUserCollection<TestUser> _users;
 
-    private readonly ICollection<TestUser> _users = new HashSet<TestUser>
-    {
-        new TestUser
-        {
-            UserName = "admin",
-            Password = "testAdmin",
-            Roles = new HashSet<string> { Roles.Administrator },
-            Policies = new HashSet<string> { Policies.CanEditClients }
-        },
-        new TestUser
-        {
-            UserName = "user",
-            Password = "testUser"
-            //< TODO - Test 'ClientId' field here for filtering results
-        }
-    };
-
-    public TestAuthenticationService(IOptions<TestAuthSettings> options)
+    public TestAuthenticationService(IOptions<TestAuthSettings> options,
+                                     IUserCollection<TestUser> users)
     {
         _settings = options.Value;
+        _users = users;
     }
 
     public async Task<string?> SignInAsync(string userName, string password, bool persist)
     {
         //< Retrieve user from internal list
-        var user = GetUserByName(userName);
+        var user = await _users.GetByUserNameAsync(userName);
 
         //< Validate found & password matches
         if (user == null) return null;
@@ -75,9 +48,6 @@ public class TestAuthenticationService : IAuthenticationService
         //< Generate & return access token
         return await GenerateTokenAsync(user);
     }
-
-    TestUser? GetUserByName(string userName)
-        => _users.FirstOrDefault(u => u.UserName == userName);
 
     Task<string> GenerateTokenAsync(TestUser user)
     {

@@ -1,8 +1,8 @@
-﻿using Amazon.AspNetCore.Identity.Cognito;
-using Amazon.Extensions.CognitoAuthentication;
+﻿using Amazon.Extensions.CognitoAuthentication;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+
 namespace Haystac.Infrastructure.Identity;
 
 public class CognitoIdentityService : IIdentityService

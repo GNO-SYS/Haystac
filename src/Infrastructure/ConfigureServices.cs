@@ -8,6 +8,7 @@ using Npgsql;
 using Haystac.Infrastructure.Identity;
 using Haystac.Infrastructure.Services;
 using Haystac.Infrastructure.Persistence;
+using Haystac.Infrastructure.Authentication;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -32,62 +33,78 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitializer>();
 
         //< Configure auth & identity
-        string authProvider = configuration.GetValue<string>("AuthProvider") ?? TestAuthProvider;
+        var authProvider = configuration.GetValue<string>("AuthProvider");
+        if (authProvider == null) throw new Exception($"'AuthProvider' is not configured.");
 
-        //< Consider wrapping these in functions, also they're quite similar
         if (authProvider == TestAuthProvider)
         {
-            services.Configure<TestAuthSettings>(configuration.GetSection(TestAuthSettings.SectionName));
-            services.AddSingleton<IAuthenticationService, TestAuthenticationService>();
-            services.AddSingleton<IIdentityService, TestIdentityService>();
-
-            var opt = configuration.Get<TestAuthSettings>() ?? new();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Authority = opt.Issuer;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    IssuerSigningKey = opt.SecurityKey,
-                    ValidAudience = opt.Audience,
-                    ValidIssuer = opt.Issuer,
-                    ValidateLifetime = true,
-                    LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
-                    ValidateAudience = true
-                };
-            });
+            services.AddTestAuth(configuration);
         }
         else if (authProvider == AwsCognitoAuthProvider)
         {
-            services.AddCognitoIdentity();
-            services.AddTransient<IAuthenticationService, CognitoAuthenticationService>();
-            services.AddTransient<IIdentityService, CognitoIdentityService>();
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Authority = configuration["Cognito:Authority"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidIssuer = configuration["Cognito:Authority"],
-                    ValidateLifetime = true,
-                    LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
-                    ValidateAudience = false
-                };
-            });
+            services.AddCognitoAuth(configuration);
         }
+
+        return services;
+    }
+
+    static IServiceCollection AddTestAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<TestAuthSettings>(configuration.GetSection(TestAuthSettings.SectionName));
+        services.AddSingleton<IAuthenticationService, TestAuthenticationService>();
+        services.AddSingleton<IIdentityService, TestIdentityService>();
+
+        var opt = configuration.Get<TestAuthSettings>();
+        if (opt == null) throw new Exception("'TestAuthSettings' is not configured, please add it!");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = opt.Issuer;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                IssuerSigningKey = opt.SecurityKey,
+                ValidAudience = opt.Audience,
+                ValidIssuer = opt.Issuer,
+                ValidateLifetime = true,
+                LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
+                ValidateAudience = true
+            };
+        });
+
+        return services;
+    }
+
+    static IServiceCollection AddCognitoAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCognitoIdentity();
+        services.AddTransient<IAuthenticationService, CognitoAuthenticationService>();
+        services.AddTransient<IIdentityService, CognitoIdentityService>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = configuration["Cognito:Authority"];
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidIssuer = configuration["Cognito:Authority"],
+                ValidateLifetime = true,
+                LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
+                ValidateAudience = false
+            };
+        });
 
         return services;
     }
