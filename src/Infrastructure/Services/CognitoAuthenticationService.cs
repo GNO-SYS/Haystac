@@ -3,7 +3,7 @@ using Amazon.Extensions.CognitoAuthentication;
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Haystac.Console.Services;
+namespace Haystac.Infrastructure.Services;
 
 public class CognitoAuthenticationService : IAuthenticationService
 {

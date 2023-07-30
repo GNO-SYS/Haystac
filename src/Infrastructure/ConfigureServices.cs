@@ -27,6 +27,7 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitializer>();
 
         services.AddCognitoIdentity();
+        services.AddScoped<IAuthenticationService, CognitoAuthenticationService>();
 
         //< TODO - May only need this for the API as CLI uses IAuthenticationService, consider making it optional
         services.AddAuthentication(options =>
