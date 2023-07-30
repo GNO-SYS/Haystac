@@ -4,8 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 
 using Npgsql;
 
-using Haystac.Application.Common.Interfaces;
-
 using Haystac.Infrastructure.Services;
 using Haystac.Infrastructure.Persistence;
 
@@ -16,7 +14,6 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IDateTimeService, DateTimeService>();
-        services.AddTransient<IJsonService, JsonService>();
 
         //< TODO - Consider injecting an in-memory DB for testing
         var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));

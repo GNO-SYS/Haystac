@@ -19,7 +19,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<CollectionDto>>> GetClients([FromQuery] GetCollectionsWithPaginationQuery query)
+    public async Task<ActionResult<PaginatedList<CollectionDto>>> GetCollections([FromQuery] GetCollectionsWithPaginationQuery query)
         => await _mediator.Send(query);
 
     [HttpGet("{id}")]

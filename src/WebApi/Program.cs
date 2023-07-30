@@ -1,3 +1,4 @@
+using Haystac.Application.Common.Middleware;
 using Haystac.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
@@ -42,6 +43,8 @@ try
     app.UseSerilogRequestLogging();
     app.UseHealthChecks("/health");
     app.UseHttpsRedirection();
+
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 
     app.UseAuthentication();
     app.UseAuthorization();

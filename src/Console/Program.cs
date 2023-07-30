@@ -15,8 +15,7 @@ builder.UseSerilog(Logging.GetLogger());
 builder.ConfigureServices(services =>
 {
     services.AddApplicationServices();
-    services.AddInfrastructureServices(config);
-    services.AddConsoleServices();
+    services.AddConsoleServices(config);
 });
 
 var registrar = new TypeRegistrar(builder);
@@ -34,12 +33,6 @@ app.Configure(config =>
 
         branch.AddCommand<CollectionListCommand>("list")
               .WithDescription("Lists detailed information about each Collection currently stored in the DB");
-    });
-
-    config.AddBranch("db", branch =>
-    {
-        branch.AddCommand<DatabaseInitializeCommand>("init")
-              .WithDescription("Attempts to initialize the database to current schema");
     });
 
     config.AddBranch("item", branch =>

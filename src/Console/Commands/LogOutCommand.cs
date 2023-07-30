@@ -7,18 +7,18 @@ public class LogOutCommand : AsyncCommand<LogOutCommand.Settings>
         //< TODO - Any settings?
     }
 
-    private readonly IAuthenticationService _auth;
+    private readonly IHaystacService _haystac;
 
-    public LogOutCommand(IAuthenticationService auth)
+    public LogOutCommand(IHaystacService haystac)
     {
-        _auth = auth;
+        _haystac = haystac;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         Helper.Write($"Logging out..");
 
-        await _auth.SignOutAsync();
+        await _haystac.LogOutAsync();
 
         Helper.Write($"\t .. Done!");
 

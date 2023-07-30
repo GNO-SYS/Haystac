@@ -3,10 +3,6 @@ using Amazon.Extensions.CognitoAuthentication;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-
-using Haystac.Application.Common.Interfaces;
-using Haystac.Application.Common.Models;
-
 namespace Haystac.Infrastructure.Identity;
 
 public class CognitoIdentityService : IIdentityService
