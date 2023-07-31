@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Collections.Commands;
-
-namespace Haystac.Console.Commands;
+﻿namespace Haystac.Console.Application.Collections;
 
 public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
 {
@@ -11,12 +9,12 @@ public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
         public string JsonFile { get; set; } = string.Empty;
     }
 
-    private readonly IMediator _mediator;
+    private readonly ICollectionRepository _collections;
     private readonly IJsonService _json;
 
-    public CollectionAddCommand(IMediator mediator, IJsonService json)
+    public CollectionAddCommand(ICollectionRepository collections, IJsonService json)
     {
-        _mediator = mediator;
+        _collections = collections;
         _json = json;
     }
 
@@ -31,7 +29,7 @@ public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
 
         Helper.Write($"Attempting to create Collection: [yellow]{dto.Identifier.EscapeMarkup()}[/]");
 
-        var id = await _mediator.Send(new CreateCollectionCommand { Dto = dto });
+        var id = await _collections.CreateCollectionAsync(dto);
 
         Helper.Write($"\t - Created with UUID: [yellow]{id}[/]");
 

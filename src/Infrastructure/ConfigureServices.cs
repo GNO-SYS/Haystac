@@ -36,6 +36,9 @@ public static class ConfigureServices
         var authProvider = configuration.GetValue<string>("AuthProvider");
         if (authProvider == null) throw new Exception($"'AuthProvider' is not configured.");
 
+        var sec = configuration.GetSection("TestAuthOptions");
+        var secret = sec.GetValue<string>("Secret");
+
         if (authProvider == TestAuthProvider)
         {
             services.AddTestAuth(configuration);
@@ -50,12 +53,12 @@ public static class ConfigureServices
 
     static IServiceCollection AddTestAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<TestAuthSettings>(configuration.GetSection(TestAuthSettings.SectionName));
         services.AddSingleton<IAuthenticationService, TestAuthenticationService>();
         services.AddSingleton<IIdentityService, TestIdentityService>();
+        services.AddSingleton<IUserCollection<TestUser>, TestUserCollection>();
 
-        var opt = configuration.Get<TestAuthSettings>();
-        if (opt == null) throw new Exception("'TestAuthSettings' is not configured, please add it!");
+        var opt = configuration.GetSection(TestAuthSettings.SectionName).Get<TestAuthSettings>();
+        if (opt == null) throw new Exception($"'{TestAuthSettings.SectionName}' is not configured");
 
         services.AddAuthentication(options =>
         {
@@ -64,12 +67,12 @@ public static class ConfigureServices
         })
         .AddJwtBearer(options =>
         {
-            options.Authority = opt.Issuer;
+            //options.Authority = opt.Issuer;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
-                IssuerSigningKey = opt.SecurityKey,
+                IssuerSigningKey = SecurityKeyHelper.GetSecurityKey(opt.Secret),
                 ValidAudience = opt.Audience,
                 ValidIssuer = opt.Issuer,
                 ValidateLifetime = true,

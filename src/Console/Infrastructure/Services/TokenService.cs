@@ -1,6 +1,6 @@
 ﻿using Haystac.Domain.Constants;
 
-namespace Haystac.Console.Services;
+namespace Haystac.Console.Infrastructure.Services;
 
 public class TokenService : ITokenService
 {

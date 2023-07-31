@@ -2,13 +2,13 @@
 
 namespace Haystac.WebApi.Controllers;
 
-[Route("users")]
+[Route("auth")]
 [ApiController]
-public class UsersController : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public UsersController(IMediator mediator)
+    public AuthenticationController(IMediator mediator)
     {
         _mediator = mediator;
     }

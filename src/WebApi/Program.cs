@@ -14,7 +14,9 @@ try
            .ReadFrom.Configuration(ctx.Configuration));
 
     //< TODO - Configure HAYSTAC__ header-based ENV var extraction & binding
-    builder.Configuration.AddEnvironmentVariables();
+    builder.Configuration
+        //.AddJsonFile("appsettings.json", optional: false)
+        .AddEnvironmentVariables();
 
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);

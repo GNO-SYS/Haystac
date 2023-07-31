@@ -1,4 +1,4 @@
-﻿namespace Haystac.Console.Commands;
+﻿namespace Haystac.Console.Application.Authentication;
 
 public class LogInCommand : AsyncCommand<LogInCommand.Settings>
 {
@@ -7,11 +7,11 @@ public class LogInCommand : AsyncCommand<LogInCommand.Settings>
         //< TODO - Any settings?
     }
 
-    private readonly IHaystacService _haystac;
+    private readonly IAuthenticationRepository _auth;
 
-    public LogInCommand(IHaystacService haystac)
+    public LogInCommand(IAuthenticationRepository auth)
     {
-        _haystac = haystac;
+        _auth = auth;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
@@ -22,7 +22,7 @@ public class LogInCommand : AsyncCommand<LogInCommand.Settings>
         var password = PromptForPassword();
 
         Helper.Write($"Attempting to login as: {userName}");
-        var res = await _haystac.LogInAsync(userName, password);
+        var res = await _auth.LogInAsync(userName, password);
         if (!res.Succeeded)
         {
             //< TODO - Handle password reset/change/2FA
@@ -38,7 +38,7 @@ public class LogInCommand : AsyncCommand<LogInCommand.Settings>
     {
         //< TODO - Client-side validation on input user name prior to sending request
         return AnsiConsole.Ask<string>("Enter [green]username[/]:");
-    } 
+    }
 
     static string PromptForPassword()
     {

@@ -1,8 +1,7 @@
-﻿namespace Haystac.Console.Services;
+﻿namespace Haystac.Console.Infrastructure.Repositories;
 
-public interface IHaystacService
+public interface IAuthenticationRepository
 {
     public Task<Result> LogInAsync(string username, string password);
-
     public Task LogOutAsync();
 }

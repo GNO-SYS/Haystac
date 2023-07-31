@@ -1,17 +1,17 @@
 ﻿using Haystac.Application.Authentication.Commands;
 
-namespace Haystac.Console.Services;
+using Haystac.Console.Infrastructure.Services;
 
-public class HaystacService : IHaystacService
+namespace Haystac.Console.Infrastructure.Repositories;
+
+public class AuthenticationRepository : IAuthenticationRepository
 {
-    private readonly string _loginUrl = "users/signin";
-
     private readonly HttpClient _client;
     private readonly ITokenService _token;
 
-    public HaystacService(HttpClient httpClient, ITokenService token)
+    public AuthenticationRepository(HttpClient client, ITokenService token)
     {
-        _client = httpClient;
+        _client = client;
         _token = token;
     }
 
@@ -26,7 +26,8 @@ public class HaystacService : IHaystacService
         var json = JsonSerializer.Serialize(cmd);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PostAsync(_loginUrl, requestContent);
+        var route = @"auth/signin";
+        var response = await _client.PostAsync(route, requestContent);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)

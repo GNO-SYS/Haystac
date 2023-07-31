@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
+
 using Serilog;
 
-using Haystac.Console.Commands;
 using Haystac.Console.Common;
+using Haystac.Console.Application.Items;
+using Haystac.Console.Application.Collections;
 
 AnsiConsole.Write(new FigletText("Haystac"));
 AnsiConsole.WriteLine($"Haystac Command-line Interface {Configuration.GetVersion()}");

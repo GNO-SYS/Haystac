@@ -1,4 +1,4 @@
-﻿namespace Haystac.Console.Services;
+﻿namespace Haystac.Console.Infrastructure.Services;
 
 public interface ITokenService
 {
