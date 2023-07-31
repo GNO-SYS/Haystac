@@ -1,3 +1,4 @@
+using Haystac.Application.Common.Middleware;
 using Haystac.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
@@ -13,7 +14,9 @@ try
            .ReadFrom.Configuration(ctx.Configuration));
 
     //< TODO - Configure HAYSTAC__ header-based ENV var extraction & binding
-    builder.Configuration.AddEnvironmentVariables();
+    builder.Configuration
+        //.AddJsonFile("appsettings.json", optional: false)
+        .AddEnvironmentVariables();
 
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -42,6 +45,8 @@ try
     app.UseSerilogRequestLogging();
     app.UseHealthChecks("/health");
     app.UseHttpsRedirection();
+
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 
     app.UseAuthentication();
     app.UseAuthorization();

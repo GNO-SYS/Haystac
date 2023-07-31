@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Items.Commands;
-
-namespace Haystac.Console.Commands;
+﻿namespace Haystac.Console.Application.Items;
 
 public class ItemDeleteCommand : AsyncCommand<ItemDeleteCommand.Settings>
 {
@@ -15,11 +13,11 @@ public class ItemDeleteCommand : AsyncCommand<ItemDeleteCommand.Settings>
         public string ItemId { get; set; } = string.Empty;
     }
 
-    private readonly IMediator _mediator;
+    private readonly IItemRepository _items;
 
-    public ItemDeleteCommand(IMediator mediator)
+    public ItemDeleteCommand(IItemRepository items)
     {
-        _mediator = mediator;
+        _items = items;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
@@ -30,12 +28,7 @@ public class ItemDeleteCommand : AsyncCommand<ItemDeleteCommand.Settings>
         Helper.Write($"Collection: [yellow]{settings.CollectionId.EscapeMarkup()}[/]");
         Helper.Write($"Item: [yellow]{settings.ItemId.EscapeMarkup()}[/]");
 
-        var cmd = new DeleteItemCommand
-        {
-            CollectionId = settings.CollectionId,
-            Identifier = settings.ItemId,
-        };
-        await _mediator.Send(cmd);
+        await _items.DeleteItemAsync(settings.CollectionId, settings.ItemId);
 
         Helper.Write($"\t .. Done!");
 

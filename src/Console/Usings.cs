@@ -10,7 +10,7 @@ global using MediatR;
 global using Spectre.Console;
 global using Spectre.Console.Cli;
 
-global using Haystac.Domain.Entities;
 global using Haystac.Application.Common.Models;
+global using Haystac.Application.Common.Interfaces;
 
-global using Haystac.Console.Services;
+global using Haystac.Console.Infrastructure.Repositories;

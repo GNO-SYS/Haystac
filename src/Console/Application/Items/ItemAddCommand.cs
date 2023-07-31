@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Items.Commands;
-
-namespace Haystac.Console.Commands;
+﻿namespace Haystac.Console.Application.Items;
 
 public class ItemAddCommand : AsyncCommand<ItemAddCommand.Settings>
 {
@@ -11,12 +9,12 @@ public class ItemAddCommand : AsyncCommand<ItemAddCommand.Settings>
         public string JsonFile { get; set; } = string.Empty;
     }
 
-    private readonly IMediator _mediator;
+    private readonly IItemRepository _items;
     private readonly IJsonService _json;
 
-    public ItemAddCommand(IMediator mediator, IJsonService json)
+    public ItemAddCommand(IItemRepository items, IJsonService json)
     {
-        _mediator = mediator;
+        _items = items;
         _json = json;
     }
 
@@ -24,13 +22,13 @@ public class ItemAddCommand : AsyncCommand<ItemAddCommand.Settings>
     {
         Helper.WriteDivider($"Adding Item from JSON");
 
-        Helper.Write($"Creating Item from: [yellow]{Helper.GetEscapedFileName(settings.JsonFile)}[/]");
+        Helper.Write($"Parsing Item from: [yellow]{Helper.GetEscapedFileName(settings.JsonFile)}[/]");
 
         var dto = await _json.ParseFromFile<ItemDto>(settings.JsonFile);
 
         Helper.Write($"Attempting to create Item: [yellow]{dto.Identifier.EscapeMarkup()}[/]");
 
-        var id = await _mediator.Send(new CreateItemCommand { Dto = dto });
+        var id = await _items.CreateItemAsync(dto);
 
         Helper.Write($"\t - Created with UUID: [yellow]{id}[/]");
 

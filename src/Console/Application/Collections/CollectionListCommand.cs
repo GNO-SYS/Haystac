@@ -1,6 +1,6 @@
 ﻿using Haystac.Application.Collections.Queries;
 
-namespace Haystac.Console.Commands;
+namespace Haystac.Console.Application.Collections;
 
 public class CollectionListCommand : AsyncCommand<CollectionListCommand.Settings>
 {

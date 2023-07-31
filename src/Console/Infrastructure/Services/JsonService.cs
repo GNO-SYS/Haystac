@@ -1,9 +1,8 @@
-﻿namespace Haystac.Console.Services;
+﻿namespace Haystac.Console.Infrastructure.Services;
 
 public class JsonService : IJsonService
 {
     //< TODO - Add a 'FileSystemService' (https://github.com/gclodge/Haystac/issues/2)
-    //< TODO - Consider migrating this to Haystac.Infrastructure along with IFileSystemService
 
     public async Task<T> ParseFromFile<T>(string jsonFile)
     {
