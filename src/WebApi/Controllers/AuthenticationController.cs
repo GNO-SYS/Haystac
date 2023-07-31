@@ -15,7 +15,13 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost("signin")]
     public async Task<ActionResult<string?>> SignIn([FromBody] PasswordSignInCommand cmd)
-        => await _mediator.Send(cmd);
+    {
+        var token = await _mediator.Send(cmd);
+
+        if (token == null) return Unauthorized();
+
+        return Ok(token);
+    }
 
     //< TODO - Add: 'resetpassword', 'changepassword', 'multifactor'
 }

@@ -9,17 +9,27 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddConsoleServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //< TODO - Use Options pattern, properly construct base paths
-        var stac_uri = new Uri(configuration["HaystacUrl"] ?? "");
-
-        services.AddHttpClient<IAuthenticationRepository, AuthenticationRepository>(client => client.BaseAddress = stac_uri);
-        services.AddHttpClient<ICollectionRepository, CollectionRepository>(client => client.BaseAddress = stac_uri)
-                .AddHttpMessageHandler<BearerTokenHandler>();
-        services.AddHttpClient<IItemRepository, ItemRepository>(client => client.BaseAddress = stac_uri)
-                .AddHttpMessageHandler<BearerTokenHandler>();
-
+        //< Add the transient services
         services.AddTransient<IJsonService, JsonService>();
         services.AddTransient<ITokenService, TokenService>();
+
+        var stac_url = configuration["Haystac:ApiRoute"];
+        if (stac_url == null) throw new Exception($"Unable to retrieve STAC API route - please configure it!");
+
+        //< Add the IAuthenticationRepository w/ no HttpMessageHandler
+        services.AddHttpClient<IAuthenticationRepository, AuthenticationRepository>(client => 
+            client.BaseAddress = new Uri($@"{stac_url}"));
+
+        //< Add the BearerTokenHandler HttpMessageHandler
+        services.AddScoped<BearerTokenHandler>();
+
+        //< Add Item & Collection repositories w/ BearerTokenHandler to attach available JWT
+        services.AddHttpClient<ICollectionRepository, CollectionRepository>(client => 
+            client.BaseAddress = new Uri($@"{stac_url}/collections"))
+                .AddHttpMessageHandler<BearerTokenHandler>();
+        services.AddHttpClient<IItemRepository, ItemRepository>(client => 
+            client.BaseAddress = new Uri($@"{stac_url}/collections"))
+                .AddHttpMessageHandler<BearerTokenHandler>();
 
         return services;
     }

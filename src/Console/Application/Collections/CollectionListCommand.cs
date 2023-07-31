@@ -1,6 +1,4 @@
-﻿using Haystac.Application.Collections.Queries;
-
-namespace Haystac.Console.Application.Collections;
+﻿namespace Haystac.Console.Application.Collections;
 
 public class CollectionListCommand : AsyncCommand<CollectionListCommand.Settings>
 {
@@ -11,11 +9,11 @@ public class CollectionListCommand : AsyncCommand<CollectionListCommand.Settings
         public int Count { get; set; } = 10;
     }
 
-    private readonly IMediator _mediator;
+    private readonly ICollectionRepository _collections;
 
-    public CollectionListCommand(IMediator mediator)
+    public CollectionListCommand(ICollectionRepository collections)
     {
-        _mediator = mediator;
+        _collections = collections;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
@@ -23,17 +21,17 @@ public class CollectionListCommand : AsyncCommand<CollectionListCommand.Settings
         Helper.WriteDivider($"Listing Collections");
 
         Helper.Write("Fetching collections..");
-        var collecs = await _mediator.Send(new GetAllCollectionsQuery());
+        var collecs = await _collections.GetAllCollectionsAsync();
         Helper.Write($" - Done! Found [yellow]{collecs.Count}[/] Collections");
 
         var table = new Table();
         table.AddColumn("Name");
-        table.AddColumn("Total Items");
+        table.AddColumn("Type");
         table.AddColumn("Description");
 
         foreach (var collec in collecs)
         {
-            table.AddRow(collec.Identifier, $"[yellow]{collec.Items.Count}[/]", collec.Description);
+            table.AddRow(collec.Identifier, $"[yellow]{collec.Type}[/]", collec.Description);
         }
 
         table.Expand();
