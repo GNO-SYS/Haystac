@@ -32,7 +32,7 @@ public class AuthenticationRepository : IAuthenticationRepository
 
         if (!response.IsSuccessStatusCode)
         {
-            return Result.Failure(new[] { responseBody });
+            return Result.Failure(new[] { $"{response.StatusCode}: {responseBody}" });
         }
 
         await _token.SetTokenAsync(responseBody);

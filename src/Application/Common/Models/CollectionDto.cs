@@ -5,7 +5,7 @@ namespace Haystac.Application.Common.Models;
 public class CollectionDto
 {
     [JsonPropertyName("type")]
-    public string Type { get; } = "Collection";
+    public string Type { get; set; } = string.Empty;
 
     [JsonPropertyName("stac_version")]
     public string StacVersion { get; set; } = string.Empty;
@@ -58,6 +58,7 @@ public static class CollectionDtoExtensions
     {
         return new CollectionDto
         {
+            Type = collection.Type,
             StacVersion = collection.StacVersion,
             Extensions = collection.Extensions,
             Identifier = collection.Identifier,
@@ -77,6 +78,7 @@ public static class CollectionDtoExtensions
     {
         return new Collection
         {
+            Type = dto.Type,
             StacVersion = dto.StacVersion,
             Extensions = dto.Extensions,
             Identifier = dto.Identifier,

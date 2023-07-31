@@ -5,6 +5,11 @@
 public class Collection : BaseStacEntity
 {
     /// <summary>
+    /// The type flag of the <see cref="Collection"/> (or Catalog) entity - only 'Collection' and 'Catalog' are allowed
+    /// </summary>
+    public string Type { get; set; } = string.Empty;
+
+    /// <summary>
     /// A short, descriptive one-line title for the <see cref="Collection"/> entity
     /// </summary>
     public string? Title { get; set; }

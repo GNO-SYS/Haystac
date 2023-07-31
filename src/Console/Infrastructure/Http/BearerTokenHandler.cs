@@ -16,12 +16,7 @@ public class BearerTokenHandler : DelegatingHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        var token = await _token.GetTokenAsync();
-
-        if (token == null)
-        {
-            throw new Exception("Unable to retrieve cached credentials, please login via 'haystac login'");
-        }
+        var token = await _token.GetTokenAsync() ?? "";
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
