@@ -1,4 +1,6 @@
-﻿using Haystac.Application.Collections.Commands;
+﻿using Microsoft.AspNetCore.Authorization;
+
+using Haystac.Application.Collections.Commands;
 using Haystac.Application.Collections.Queries;
 
 using Haystac.Application.Items.Commands;
@@ -8,7 +10,7 @@ namespace Haystac.WebApi.Controllers;
 
 [Route("collections")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class CollectionsController : ControllerBase
 {
     private readonly IMediator _mediator;
