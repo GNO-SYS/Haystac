@@ -26,7 +26,7 @@ public class AuthenticationRepository : IAuthenticationRepository
         var json = JsonSerializer.Serialize(cmd);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var route = @"auth/signin";
+        var route = @"signin";
         var response = await _client.PostAsync(route, requestContent);
         var responseBody = await response.Content.ReadAsStringAsync();
 

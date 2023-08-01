@@ -18,17 +18,17 @@ public static class ConfigureServices
 
         //< Add the IAuthenticationRepository w/ no HttpMessageHandler
         services.AddHttpClient<IAuthenticationRepository, AuthenticationRepository>(client => 
-            client.BaseAddress = new Uri($@"{stac_url}"));
+            client.BaseAddress = new Uri($@"{stac_url}/auth/"));
 
         //< Add the BearerTokenHandler HttpMessageHandler
         services.AddScoped<BearerTokenHandler>();
 
         //< Add Item & Collection repositories w/ BearerTokenHandler to attach available JWT
         services.AddHttpClient<ICollectionRepository, CollectionRepository>(client => 
-            client.BaseAddress = new Uri($@"{stac_url}/collections"))
+            client.BaseAddress = new Uri($@"{stac_url}/collections/"))
                 .AddHttpMessageHandler<BearerTokenHandler>();
         services.AddHttpClient<IItemRepository, ItemRepository>(client => 
-            client.BaseAddress = new Uri($@"{stac_url}/collections"))
+            client.BaseAddress = new Uri($@"{stac_url}/collections/"))
                 .AddHttpMessageHandler<BearerTokenHandler>();
 
         return services;
