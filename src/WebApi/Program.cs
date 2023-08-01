@@ -4,7 +4,6 @@ using Haystac.Infrastructure.Persistence;
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 Log.Information($" -- Starting up -- ");
 
-
 try
 {
     var builder = WebApplication.CreateBuilder(args);

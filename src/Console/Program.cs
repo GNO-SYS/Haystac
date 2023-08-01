@@ -25,7 +25,7 @@ var app = new CommandApp(registrar);
 
 app.Configure(config =>
 {
-    config.SetApplicationName("Haystac CLI");
+    config.SetApplicationName("haystac");
 
     config.SetExceptionHandler(ex =>
     {
@@ -43,41 +43,41 @@ app.Configure(config =>
     {
         branch.AddCommand<CollectionAddCommand>("add")
               .WithDescription("Attempts to import a STAC Collection from an input JSON file")
-              .WithExample(new[] { "add", @"C:\_test\stac_collection.json" });
+              .WithExample(new[] { "collection", "add", @"C:\_test\stac_collection.json" });
 
         branch.AddCommand<CollectionListCommand>("list")
               .WithDescription("Lists detailed information about each Collection currently stored in the DB");
 
         branch.AddCommand<CollectionGetCommand>("get")
               .WithDescription("Retrieves a specific Collection and writes it to local JSON file.")
-              .WithExample(new[] { "get", "CollectionName", @"C:\_test\collection_name.json" });
+              .WithExample(new[] { "collection", "get", "CollectionName", @"C:\_test\collection_name.json" });
 
         branch.AddCommand<CollectionUpdateCommand>("update")
               .WithDescription("Attempts to update existing STAC Collection with data parsed from local JSON.")
-              .WithExample(new[] { "update", @"C:\_test\stac_collection.json" });
+              .WithExample(new[] { "collection", "update", @"C:\_test\stac_collection.json" });
 
         branch.AddCommand<CollectionDeleteCommand>("delete")
               .WithDescription("Retrieves a specific Collection and writes it to loca JSON file.")
-              .WithExample(new[] { "delete", "CollectionName" });
+              .WithExample(new[] { "collection", "delete", "CollectionName" });
     });
 
     config.AddBranch("item", branch =>
     {
         branch.AddCommand<ItemAddCommand>("add")
               .WithDescription("Attempts to import a STAC Item into an existing STAC Collection from an input JSON file")
-              .WithExample(new[] { "add", @"C:\_test\stac_item.json" });
+              .WithExample(new[] { "item", "add", @"C:\_test\stac_item.json" });
 
         branch.AddCommand<ItemGetCommand>("get")
               .WithDescription("Retrieves a specific Item and writes it to local JSON file.")
-              .WithExample(new[] { "get", "CollectionName", "ItemName", @"C:\_test\item_name.json" });
+              .WithExample(new[] { "item", "get", "CollectionName", "ItemName", @"C:\_test\item_name.json" });
 
         branch.AddCommand<ItemUpdateCommand>("update")
               .WithDescription("Retrieves a specific Item and writes it to local JSON file.")
-              .WithExample(new[] { "update", @"C:\_test\stac_item.json" });
+              .WithExample(new[] { "item", "update", @"C:\_test\stac_item.json" });
 
         branch.AddCommand<ItemDeleteCommand>("delete")
               .WithDescription("Attempts to delete the given Item from the given Collection")
-              .WithExample(new[] { "delete", "CollectionName", "ItemName" });
+              .WithExample(new[] { "item", "delete", "CollectionName", "ItemName" });
     });
 
 });

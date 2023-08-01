@@ -46,7 +46,7 @@ public class CollectionRepository : ICollectionRepository
 
     public async Task<CollectionDto> GetCollectionByIdAsync(string collectionId)
     {
-        var route = $@"collections\{collectionId}";
+        var route = $"{collectionId}";
         var request = new HttpRequestMessage(HttpMethod.Get, route);
 
         var response = await _client.SendAsync(request);
@@ -68,7 +68,7 @@ public class CollectionRepository : ICollectionRepository
         var json = JsonSerializer.Serialize(dto);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var route = $@"{dto.Identifier}";
+        var route = $"{dto.Identifier}";
         var response = await _client.PutAsync(route, requestContent);
 
         if (!response.IsSuccessStatusCode)
@@ -82,7 +82,7 @@ public class CollectionRepository : ICollectionRepository
 
     public async Task DeleteCollectionAsync(string collectionId)
     {
-        var route = $@"{collectionId}";
+        var route = $"{collectionId}";
         var delRequest = new HttpRequestMessage(HttpMethod.Delete, route);
 
         var response = await _client.SendAsync(delRequest);

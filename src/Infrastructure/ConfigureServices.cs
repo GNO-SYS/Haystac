@@ -36,9 +36,6 @@ public static class ConfigureServices
         var authProvider = configuration.GetValue<string>("AuthProvider");
         if (authProvider == null) throw new Exception($"'AuthProvider' is not configured.");
 
-        var sec = configuration.GetSection("TestAuthOptions");
-        var secret = sec.GetValue<string>("Secret");
-
         if (authProvider == TestAuthProvider)
         {
             services.AddTestAuth(configuration);

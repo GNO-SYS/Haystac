@@ -60,20 +60,13 @@ public class TestAuthenticationService : IAuthenticationService
 
         var token = new JwtSecurityToken(
                 issuer: _settings.Issuer,
-                expires: DateTime.Now.AddDays(_settings.ExpiryMinutes),
+                expires: DateTime.Now.AddMinutes(_settings.ExpiryMinutes),
                 audience: _settings.Audience,
                 claims: claims,
                 signingCredentials: creds
             );
 
-        try
-        {
-            var payload = new JwtSecurityTokenHandler().WriteToken(token);
-            return Task.FromResult(payload);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+        var payload = new JwtSecurityTokenHandler().WriteToken(token);
+        return Task.FromResult(payload);
     }
 }
