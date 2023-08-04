@@ -5,6 +5,11 @@
 public class Collection : BaseStacEntity
 {
     /// <summary>
+    /// A string identifier of the associated 'Client' for this entity - if null, the entity is 'Anonymous'
+    /// </summary>
+    public string? ClientId { get; set; }
+
+    /// <summary>
     /// The type flag of the <see cref="Collection"/> (or Catalog) entity - only 'Collection' and 'Catalog' are allowed
     /// </summary>
     public string Type { get; set; } = string.Empty;
@@ -59,8 +64,6 @@ public class Collection : BaseStacEntity
     /// </summary>
     [Column(TypeName = "jsonb")]
     public Dictionary<string, Asset>? Assets { get; set; }
-
-    public Client? Client { get; set; }
 
     /// <summary>
     /// A collection of all <see cref="Item"/> entities contained by this <see cref="Collection"/> entity

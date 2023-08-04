@@ -10,7 +10,6 @@ namespace Haystac.WebApi.Controllers;
 
 [Route("collections")]
 [ApiController]
-[Authorize]
 public class CollectionsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -28,6 +27,7 @@ public class CollectionsController : ControllerBase
     public async Task<ActionResult<CollectionDto>> GetCollectionById(string id)
         => await _mediator.Send(new GetCollectionByIdentifierQuery { CollectionId = id });
 
+    [Authorize]
     [HttpPost("{id}")]
     public async Task<ActionResult<Guid>> CreateCollection([FromBody] CollectionDto dto, string id)
     {
@@ -36,6 +36,7 @@ public class CollectionsController : ControllerBase
         return await _mediator.Send(new CreateCollectionCommand { Dto = dto });
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +50,7 @@ public class CollectionsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
@@ -63,6 +65,7 @@ public class CollectionsController : ControllerBase
     public async Task<ActionResult<List<ItemDto>>> GetItemsForCollection(string id)
         => await _mediator.Send(new GetItemsByCollectionQuery { CollectionId = id });
 
+    [Authorize]
     [HttpPost("{id}/items/{itemId}")]
     public async Task<ActionResult<Guid>> CreateItem([FromBody] ItemDto dto, string id, string itemId)
     {
@@ -72,6 +75,7 @@ public class CollectionsController : ControllerBase
         return await _mediator.Send(new CreateItemCommand { Dto = dto });
     }
 
+    [Authorize]
     [HttpPut("{id}/items/{itemId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,6 +90,7 @@ public class CollectionsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}/items/{itemId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
