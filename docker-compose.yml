@@ -1,0 +1,48 @@
+version: '3.4'
+
+networks:
+  haystac-api:
+
+services:
+  haystac:
+    image: haystac:latest
+    depends_on:
+      - "postgis_image"
+    build:
+      context: .
+      dockerfile: src/WebApi/Dockerfile
+    ports:
+      - "8000:80"
+      - "8001:443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      ASPNETCORE_Kestrel__Certificates__Default__Password: haystac
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/haystac.pfx
+      ConnectionStrings__DefaultConnection: host=postgis_image;port=5432;database=HaystacDatabase;username=haystacuser;password=haystac
+      AuthProvider: Test
+      TestAuthSettings__Secret: SuPeRsEeKrIt-PrIvAtEkEy
+      TestAuthSettings__ExpiryMinutes: 30
+      TestAuthSettings__Issuer: TestHaystacIssuer
+      TestAuthSettings__Audience: TestHaystacAudience
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    networks:
+      - haystac-api
+
+  postgis_image:
+    image: postgis/postgis:latest
+    ports:
+      - "5432"
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "haystacuser"
+      POSTGRES_PASSWORD: "haystac"
+      POSTGRES_DB: "HaystacDatabase"
+    networks:
+      - haystac-api
+
+volumes:
+  db_volume:

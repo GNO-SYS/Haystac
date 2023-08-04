@@ -35,7 +35,7 @@ public class CollectionRepository : ICollectionRepository
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to retrieve Collection due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         var dtos = JsonSerializer.Deserialize<List<CollectionDto>>(responseBody);
@@ -54,7 +54,7 @@ public class CollectionRepository : ICollectionRepository
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to retrieve Collection due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         var dto = JsonSerializer.Deserialize<CollectionDto>(responseBody);
@@ -74,7 +74,7 @@ public class CollectionRepository : ICollectionRepository
         if (!response.IsSuccessStatusCode)
         {
             var responseBody = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Failed to update Collection due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         return;
@@ -90,7 +90,7 @@ public class CollectionRepository : ICollectionRepository
         if (!response.IsSuccessStatusCode)
         {
             var responseBody = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Failed to delete Collection due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         return;

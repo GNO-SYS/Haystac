@@ -20,7 +20,7 @@ public class ItemRepository : IItemRepository
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to create Item due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         return JsonSerializer.Deserialize<Guid>(responseBody);
@@ -36,7 +36,7 @@ public class ItemRepository : IItemRepository
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to retrieve Item due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         var dto = JsonSerializer.Deserialize<ItemDto>(responseBody);
@@ -56,7 +56,7 @@ public class ItemRepository : IItemRepository
         if (!response.IsSuccessStatusCode)
         {
             var responseBody = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Failed to update Item due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         return;
@@ -72,7 +72,7 @@ public class ItemRepository : IItemRepository
         if (!response.IsSuccessStatusCode)
         {
             var responseBody = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Failed to delete Item due to: {responseBody}");
+            throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
         return;
