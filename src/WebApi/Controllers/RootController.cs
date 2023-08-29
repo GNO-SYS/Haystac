@@ -14,7 +14,7 @@ public class RootController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<CollectionDto>> GetRootCatalog()
+    public async Task<ActionResult<RootCatalogDto>> GetRootCatalog()
         => await _mediator.Send(new GetRootCatalogQuery());
 
     //< TODO - Actually complete the 'GetRootCatalogQueryHandler'

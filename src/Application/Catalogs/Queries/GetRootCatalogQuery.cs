@@ -2,10 +2,10 @@
 
 namespace Haystac.Application.Catalogs.Queries;
 
-public record GetRootCatalogQuery : IRequest<CollectionDto> { }
+public record GetRootCatalogQuery : IRequest<RootCatalogDto> { }
 
 public class GetRootCatalogQueryHandler
-    : IRequestHandler<GetRootCatalogQuery, CollectionDto>
+    : IRequestHandler<GetRootCatalogQuery, RootCatalogDto>
 {
     private readonly IApplicationDbContext _context;
     private readonly IUrlService _url;
@@ -17,7 +17,7 @@ public class GetRootCatalogQueryHandler
         _url = url;
     }
 
-    public async Task<CollectionDto> Handle(GetRootCatalogQuery query, CancellationToken cancellationToken)
+    public async Task<RootCatalogDto> Handle(GetRootCatalogQuery query, CancellationToken cancellationToken)
     {
         //< Get only the 'anonymous' collections
         var collecs = await _context.Collections
@@ -26,20 +26,21 @@ public class GetRootCatalogQueryHandler
 
         var links = await GenerateLinks(collecs);
 
-        var dto = new CollectionDto
+        //< TODO - Change the StacVersion / ID / Title into configuration variables that are pulled in
+        //< TODO - How to handle 'conformsTo' - if someone includes a new extension, we should make it seamless
+        var dto = new RootCatalogDto
         {
             StacVersion = "1.0.0",
             Identifier = "haystac-root",
             Title = "Root catalog for Haytstac API",
             Type = "Catalog",
+            ConformsTo = new List<string>
+            {
+                "https://api.stacspec.org/v1.0.0/core"
+                //< TODO - Add that we implement search once its added
+            },
             Links = links
         };
-
-        //< TODO - Handle 'Conforms to' tags - where is that?
-        //< TODO - How handle Identifier / Title / Description / version, etc?
-        //<         .. We may need to store a 'root' Catalog, and make this one on-demand if needed
-        //<      - Leaning on the side of maintaing a 'haystac-root' catalog, that is seeded as above
-        //<      - Users can then update it as they see fit, we don't have to manage it all
 
         return dto;
     }
