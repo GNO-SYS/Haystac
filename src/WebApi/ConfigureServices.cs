@@ -18,6 +18,7 @@ public static class ConfigureServices
         }));
 
         services.AddScoped<IUser, CurrentUser>();
+        services.AddScoped<IUrlService, UrlService>();
         services.AddHttpContextAccessor();
 
         services.AddHealthChecks()

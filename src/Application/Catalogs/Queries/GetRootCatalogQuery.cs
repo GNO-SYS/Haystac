@@ -27,12 +27,12 @@ public class GetRootCatalogQueryHandler
         var links = await GenerateLinks(collecs);
 
         //< TODO - Change the StacVersion / ID / Title into configuration variables that are pulled in
-        //< TODO - How to handle 'conformsTo' - if someone includes a new extension, we should make it seamless
         var dto = new RootCatalogDto
         {
             StacVersion = "1.0.0",
-            Identifier = "haystac-root",
+            Identifier = "haystac",
             Title = "Root catalog for Haytstac API",
+            Description = "A descriptive message about the Haystac landing page",
             Type = "Catalog",
             ConformsTo = new List<string>
             {
@@ -71,9 +71,12 @@ public class GetRootCatalogQueryHandler
             }
         };
 
-        var collectionLinks = collecs.Select(Link.GenerateChildLink);
-        links.AddRange(collectionLinks);
-
+        if (collecs.Any())
+        {
+            var collectionLinks = collecs.Select(Link.GenerateChildLink);
+            links.AddRange(collectionLinks);
+        }
+        
         return Task.FromResult(links);
     }
 }
