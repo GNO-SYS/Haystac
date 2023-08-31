@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Microsoft.Extensions.Configuration;
 
@@ -9,10 +8,8 @@ public static class Configuration
 {
     public static string GetVersion()
     {
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var productVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
-
-        return productVersion ?? "Unknown";
+        var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+        return assemblyVersion ?? "Unknown";
     }
 
     public static IConfiguration GetConfiguration()

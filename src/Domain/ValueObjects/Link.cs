@@ -29,6 +29,16 @@ public class Link : ValueObject
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Title { get; set; }
 
+    public static Link GenerateChildLink(Collection collec)
+    {
+        return new Link
+        {
+            Relationship = "child",
+            Href = $"/collections/{collec.Identifier}",
+            Type = "application/json"
+        };
+    }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Href;
