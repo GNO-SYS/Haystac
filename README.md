@@ -1,10 +1,11 @@
 # Haystac
+![Alt text](<images/HaySTAC_Logo_500x300.png>)
 
 - [Haystac](#haystac)
-    - [Overview](#overview)
-    - [Technologies](#technologies)
+  - [Overview](#overview)
+  - [Technologies](#technologies)
 - [Getting Started](#getting-started)
-    - [Docker Compose](#docker-compose)
+  - [Docker Compose](#docker-compose)
 
 ## Overview
 
