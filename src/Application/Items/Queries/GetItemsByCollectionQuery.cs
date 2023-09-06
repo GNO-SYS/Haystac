@@ -9,10 +9,14 @@ public record GetItemsByCollectionQuery : IRequest<List<ItemDto>>
 public class GetItemsByCollectionQueryHandler : IRequestHandler<GetItemsByCollectionQuery, List<ItemDto>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public GetItemsByCollectionQueryHandler(IApplicationDbContext context)
+    public GetItemsByCollectionQueryHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task<List<ItemDto>> Handle(GetItemsByCollectionQuery query, CancellationToken cancellationToken)
@@ -21,7 +25,12 @@ public class GetItemsByCollectionQueryHandler : IRequestHandler<GetItemsByCollec
                                                .Include(c => c.Items)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (collec == null) throw new NotFoundException(nameof(Collection), query.CollectionId);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (collec == null || collec.ClientId != clientId)
+        {
+            throw new NotFoundException(nameof(Collection), query.CollectionId);
+        }
 
         return collec.Items.Select(i => i.ToDto()).ToList();
     }

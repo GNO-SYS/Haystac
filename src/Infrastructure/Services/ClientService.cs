@@ -2,12 +2,12 @@
 
 namespace Haystac.Infrastructure.Services;
 
-public class ClientFilter : IClientFilter
+public class ClientService : IClientService
 {
     private readonly IUser _user;
     private readonly IIdentityService _identityService;
 
-    public ClientFilter(
+    public ClientService(
         IUser user,
         IIdentityService identityService)
     {
@@ -15,7 +15,14 @@ public class ClientFilter : IClientFilter
         _identityService = identityService;
     }
 
-    public async Task<IEnumerable<Collection>> FilterAsync(IEnumerable<Collection> collections)
+    public async Task<string?> GetClientIdAsync()
+    {
+        if (_user.Id == null) return null;
+
+        return await _identityService.GetClientIdAsync(_user.Id);
+    }
+
+    public async Task<IEnumerable<Collection>> FilterCollectionsAsync(IEnumerable<Collection> collections)
     {
         if (_user.Id == null)
         {
@@ -42,4 +49,6 @@ public class ClientFilter : IClientFilter
 
     public static Task<IEnumerable<Collection>> GetAnonymousAsync(IEnumerable<Collection> collections)
         => Task.FromResult(collections.Where(c => c.ClientId == null));
+
+    
 }

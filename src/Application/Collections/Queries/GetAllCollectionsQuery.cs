@@ -6,14 +6,14 @@ public class GetAllCollectionsQueryHandler
     : IRequestHandler<GetAllCollectionsQuery, List<CollectionDto>> 
 {
     private readonly IApplicationDbContext _context;
-    private readonly IClientFilter _filter;
+    private readonly IClientService _clients;
 
     public GetAllCollectionsQueryHandler(
         IApplicationDbContext context,
-        IClientFilter filter)
+        IClientService clients)
     {
         _context = context;
-        _filter = filter;
+        _clients = clients;
     }
 
     public async Task<List<CollectionDto>> Handle(GetAllCollectionsQuery request,
@@ -21,7 +21,7 @@ public class GetAllCollectionsQueryHandler
     {
         var collecs = await _context.Collections.ToListAsync(cancellationToken);
 
-        var filtered = await _filter.FilterAsync(collecs);
+        var filtered = await _clients.FilterCollectionsAsync(collecs);
 
         return filtered.Select(c => c.ToDto()).ToList();
     }
