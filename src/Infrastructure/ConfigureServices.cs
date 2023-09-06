@@ -20,6 +20,7 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IDateTimeService, DateTimeService>();
+        services.AddTransient<IClientFilter, ClientFilter>();
 
         //< TODO - Consider injecting an in-memory DB for testing
         var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));

@@ -17,6 +17,7 @@ var config = Configuration.GetConfiguration();
 builder.UseSerilog(Logging.GetLogger());
 builder.ConfigureServices(services =>
 {
+    services.AddDataProtection();
     services.AddConsoleServices(config);
 });
 
