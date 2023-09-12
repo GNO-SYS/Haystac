@@ -13,10 +13,14 @@ public class GetItemByIdentifierQueryHandler
     : IRequestHandler<GetItemByIdentifierQuery, ItemDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public GetItemByIdentifierQueryHandler(IApplicationDbContext context)
+    public GetItemByIdentifierQueryHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task<ItemDto> Handle(GetItemByIdentifierQuery query,
@@ -26,7 +30,12 @@ public class GetItemByIdentifierQueryHandler
                                                .Include(c => c.Items)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (collec == null) throw new NotFoundException(nameof(Collection), query.Collection);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (collec == null || !await _clients.IsCollectionVisible(collec))
+        {
+            throw new NotFoundException(nameof(Collection), query.Collection);
+        }
 
         var item = collec.Items.FirstOrDefault(i => i.Identifier == query.Identifier);
 

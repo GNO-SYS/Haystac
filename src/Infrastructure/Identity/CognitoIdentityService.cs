@@ -56,4 +56,9 @@ public class CognitoIdentityService : IIdentityService
     {
         throw new NotImplementedException();
     }
+
+    public Task<string?> GetClientIdAsync(string userId)
+    {
+        throw new NotImplementedException();
+    }
 }

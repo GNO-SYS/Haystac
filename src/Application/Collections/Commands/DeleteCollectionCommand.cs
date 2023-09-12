@@ -9,10 +9,14 @@ public record DeleteCollectionCommand : IRequest
 public class DeleteCollectionCommandHandler : IRequestHandler<DeleteCollectionCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public DeleteCollectionCommandHandler(IApplicationDbContext context)
+    public DeleteCollectionCommandHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task Handle(DeleteCollectionCommand command, CancellationToken cancellationToken)
@@ -21,7 +25,12 @@ public class DeleteCollectionCommandHandler : IRequestHandler<DeleteCollectionCo
                                                .Include(c => c.Items)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null) throw new NotFoundException(nameof(Collection), command.CollectionId);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (entity == null || !await _clients.IsCollectionVisible(entity))
+        {
+            throw new NotFoundException(nameof(Collection), command.CollectionId);
+        }
 
         //< Remove all child Items
         foreach (var item in entity.Items) _context.Items.Remove(item);

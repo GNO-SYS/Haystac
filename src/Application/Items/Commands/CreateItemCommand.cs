@@ -9,10 +9,14 @@ public class CreateItemCommandHandler
     : IRequestHandler<CreateItemCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public CreateItemCommandHandler(IApplicationDbContext context)
+    public CreateItemCommandHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task<Guid> Handle(CreateItemCommand command, CancellationToken cancellationToken)
@@ -22,14 +26,16 @@ public class CreateItemCommandHandler
         var collec = await _context.Collections
             .FirstOrDefaultAsync(c => c.Identifier == entity.CollectionIdentifier, cancellationToken);
 
-        if (collec is null) throw new NotFoundException(nameof(Collection), entity.CollectionIdentifier);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (collec == null || !await _clients.IsCollectionVisible(collec))
+        {
+            throw new NotFoundException(nameof(Collection), entity.CollectionIdentifier);
+        }
 
         entity.CollectionUuid = collec.Id;
 
         collec.Extent.UpdateToInclude(entity);
-
-        //< Removed in favour of just updating the Collection since we already have it
-        //entity.AddDomainEvent(new ItemAddedEvent(entity));
 
         _context.Items.Add(entity);
 

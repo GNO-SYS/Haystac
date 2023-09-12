@@ -11,10 +11,14 @@ public class GetCollectionByIdentifierQueryHandler
     : IRequestHandler<GetCollectionByIdentifierQuery, CollectionDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public GetCollectionByIdentifierQueryHandler(IApplicationDbContext context)
+    public GetCollectionByIdentifierQueryHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task<CollectionDto> Handle(GetCollectionByIdentifierQuery query,
@@ -23,7 +27,12 @@ public class GetCollectionByIdentifierQueryHandler
         var entity = await _context.Collections.Where(c => c.Identifier == query.CollectionId)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null) throw new NotFoundException(nameof(Collection), query.CollectionId);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (entity == null || !await _clients.IsCollectionVisible(entity))
+        {
+            throw new NotFoundException(nameof(Collection), query.CollectionId);
+        }
 
         return entity.ToDto();
     }

@@ -12,14 +12,28 @@ public record UpdateItemCommand : IRequest
 public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public UpdateItemCommandHandler(IApplicationDbContext context)
+    public UpdateItemCommandHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task Handle(UpdateItemCommand command, CancellationToken cancellationToken)
     {
+        var collec = await _context.Collections
+            .FirstOrDefaultAsync(c => c.Identifier == command.CollectionId, cancellationToken);
+
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (collec == null || !await _clients.IsCollectionVisible(collec))
+        {
+            throw new NotFoundException(nameof(Collection), command.CollectionId);
+        }
+
         var entity = await _context.Items.Where(c => c.CollectionIdentifier == command.CollectionId
                                                   && c.Identifier == command.Identifier)
                                          .FirstOrDefaultAsync(cancellationToken);

@@ -36,8 +36,8 @@ public class GetRootCatalogQueryHandler
             Type = "Catalog",
             ConformsTo = new List<string>
             {
-                "https://api.stacspec.org/v1.0.0/core"
-                //< TODO - Add that we implement search once its added
+                "https://api.stacspec.org/v1.0.0/core",
+                "https://api.stacspec.org/v1.0.0/item-search"
             },
             Links = links
         };
@@ -68,6 +68,20 @@ public class GetRootCatalogQueryHandler
                 Relationship = "service-desc",
                 Href = $"{baseUrl}/swagger/v1/swagger.json",
                 Type = "application/vnd.oai.openapi+json;version=3.0"
+            },
+            new Link
+            {
+                Relationship = "self",
+                Href = $"{baseUrl}/search",
+                Type = "application/geo+json",
+                Method = "GET"
+            },
+            new Link
+            {
+                Relationship = "self",
+                Href = $"{baseUrl}/search",
+                Type = "application/geo+json",
+                Method = "POST"
             }
         };
 

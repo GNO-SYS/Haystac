@@ -40,4 +40,12 @@ public class TestIdentityService : IIdentityService
     public Task<Result> DeleteUserAsync(string userId)
         => throw new NotImplementedException();
 
+    public async Task<string?> GetClientIdAsync(string userId)
+    {
+        var user = await _users.GetByUserIdAsync(userId);
+
+        if (user == null) return null;
+
+        return user.ClientId;
+    }
 }

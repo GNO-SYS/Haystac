@@ -14,7 +14,7 @@ public class ItemRepository : IItemRepository
         var json = JsonSerializer.Serialize(dto);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var route = $@"collections\{dto.Collection}\items\{dto.Identifier}";
+        var route = $@"{dto.Collection}\items\{dto.Identifier}";
         var response = await _client.PostAsync(route, requestContent);
         var responseBody = await response.Content.ReadAsStringAsync();
 
@@ -28,7 +28,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<ItemDto> GetItemByIdAsync(string collectionId, string id)
     {
-        var route = $@"collections\{collectionId}\items\{id}";
+        var route = $@"{collectionId}\items\{id}";
         var request = new HttpRequestMessage(HttpMethod.Get, route);
 
         var response = await _client.SendAsync(request);
@@ -50,7 +50,7 @@ public class ItemRepository : IItemRepository
         var json = JsonSerializer.Serialize(dto);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var route = $@"collections\{dto.Collection}\items\{dto.Identifier}";
+        var route = $@"{dto.Collection}\items\{dto.Identifier}";
         var response = await _client.PutAsync(route, requestContent);
 
         if (!response.IsSuccessStatusCode)
@@ -64,7 +64,7 @@ public class ItemRepository : IItemRepository
 
     public async Task DeleteItemAsync(string collectionId, string id)
     {
-        var route = $@"collections\{collectionId}\items\{id}";
+        var route = $@"{collectionId}\items\{id}";
         var delRequest = new HttpRequestMessage(HttpMethod.Delete, route);
 
         var response = await _client.SendAsync(delRequest);

@@ -4,6 +4,9 @@ using Haystac.Infrastructure.Persistence;
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 Log.Information($" -- Starting up -- ");
 
+
+const string _corsPolicyName = "HaystacPolicy";
+
 try
 {
     var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +15,16 @@ try
            .WriteTo.Console()
            .ReadFrom.Configuration(ctx.Configuration));
 
-    //< TODO - Configure HAYSTAC__ header-based ENV var extraction & binding
     builder.Configuration
         //.AddJsonFile("appsettings.json", optional: false)
         .AddEnvironmentVariables();
+
+    builder.Services.AddCors(o => o.AddPolicy(_corsPolicyName, builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    }));
 
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -47,8 +56,11 @@ try
 
     app.UseMiddleware<ErrorHandlingMiddleware>();
 
+    app.UseCors(_corsPolicyName);
+
     app.UseAuthentication();
     app.UseAuthorization();
+
     app.MapControllers();
 
     app.Run();

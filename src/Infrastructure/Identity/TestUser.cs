@@ -8,6 +8,8 @@ public record class TestUser
 
     public string Password { get; set; } = string.Empty;
 
+    public string? ClientId { get; set; } = null;
+
     public ICollection<string> Roles { get; set; } = new HashSet<string>();
 
     public ICollection<string> Policies { get; set; } = new HashSet<string>();

@@ -11,10 +11,14 @@ public record UpdateCollectionCommand : IRequest
 public class UpdateCollectionCommandHandler : IRequestHandler<UpdateCollectionCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IClientService _clients;
 
-    public UpdateCollectionCommandHandler(IApplicationDbContext context)
+    public UpdateCollectionCommandHandler(
+        IApplicationDbContext context,
+        IClientService clients)
     {
         _context = context;
+        _clients = clients;
     }
 
     public async Task Handle(UpdateCollectionCommand command, CancellationToken cancellationToken)
@@ -22,7 +26,12 @@ public class UpdateCollectionCommandHandler : IRequestHandler<UpdateCollectionCo
         var entity = await _context.Collections.Where(c => c.Identifier == command.CollectionId)
                                                .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null) throw new NotFoundException(nameof(Collection), command.CollectionId);
+        var clientId = await _clients.GetClientIdAsync();
+
+        if (entity == null || !await _clients.IsCollectionVisible(entity))
+        {
+            throw new NotFoundException(nameof(Collection), command.CollectionId);
+        }
 
         entity.StacVersion = command.Dto.StacVersion;
         entity.Extensions = command.Dto.Extensions ?? entity.Extensions;
