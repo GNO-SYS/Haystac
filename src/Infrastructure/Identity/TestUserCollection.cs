@@ -11,13 +11,14 @@ public class TestUserCollection : IUserCollection<TestUser>
             UserName = "admin",
             Password = "testAdmin",
             Roles = new HashSet<string> { Roles.Administrator },
-            Policies = new HashSet<string> { Policies.CanEditClients }
+            Policies = new HashSet<string> { Policies.CanEditClients },
+            ClientId = "d9ce7e72-5e03-4a62-ad4e-e15f793c6e72"
         },
         new TestUser
         {
             UserName = "user",
-            Password = "testUser"
-            //< TODO - Test 'ClientId' field here for filtering results
+            Password = "testUser",
+            ClientId = "4af8a081-be9a-4a43-b6dd-88fec0de9242"
         }
     };
 

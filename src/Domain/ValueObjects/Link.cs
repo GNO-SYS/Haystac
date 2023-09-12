@@ -29,6 +29,13 @@ public class Link : ValueObject
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Title { get; set; }
 
+    /// <summary>
+    /// HTTP method described by the endpoint at the given link
+    /// </summary>
+    [JsonPropertyName("method")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Method { get; set; }
+
     public static Link GenerateChildLink(Collection collec)
     {
         return new Link

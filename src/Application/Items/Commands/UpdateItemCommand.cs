@@ -29,7 +29,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
 
         var clientId = await _clients.GetClientIdAsync();
 
-        if (collec == null || collec.ClientId != clientId)
+        if (collec == null || !await _clients.IsCollectionVisible(collec))
         {
             throw new NotFoundException(nameof(Collection), command.CollectionId);
         }

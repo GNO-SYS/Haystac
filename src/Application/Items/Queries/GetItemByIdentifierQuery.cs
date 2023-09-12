@@ -32,7 +32,7 @@ public class GetItemByIdentifierQueryHandler
 
         var clientId = await _clients.GetClientIdAsync();
 
-        if (collec == null || collec.ClientId != clientId)
+        if (collec == null || !await _clients.IsCollectionVisible(collec))
         {
             throw new NotFoundException(nameof(Collection), query.Collection);
         }

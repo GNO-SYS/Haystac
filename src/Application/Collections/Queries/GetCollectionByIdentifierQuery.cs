@@ -29,7 +29,7 @@ public class GetCollectionByIdentifierQueryHandler
 
         var clientId = await _clients.GetClientIdAsync();
 
-        if (entity == null || entity.ClientId != clientId)
+        if (entity == null || !await _clients.IsCollectionVisible(entity))
         {
             throw new NotFoundException(nameof(Collection), query.CollectionId);
         }

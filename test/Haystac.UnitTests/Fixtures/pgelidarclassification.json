@@ -6,19 +6,19 @@
   "links": [
     {
       "rel": "self",
-      "href": "https://stac.gno-sys.com/collections/pgelidarclassification"
+      "href": "https://localhost:7010/collections/pgelidarclassification"
     },
     {
       "rel": "parent",
-      "href": "https://stac.gno-sys.com/"
+      "href": "https://localhost:7010/"
     },
     {
       "rel": "root",
-      "href": "https://stac.gno-sys.com/"
+      "href": "https://localhost:7010/"
     },
     {
       "rel": "items",
-      "href": "https://stac.gno-sys.com/collections/pgelidarclassification/items"
+      "href": "https://localhost:7010/collections/pgelidarclassification/items"
     }
   ],
   "title": "PGE Lidar Classification",

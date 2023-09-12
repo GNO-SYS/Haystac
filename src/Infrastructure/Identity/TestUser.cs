@@ -8,7 +8,7 @@ public record class TestUser
 
     public string Password { get; set; } = string.Empty;
 
-    public string ClientId { get; set; } = Guid.NewGuid().ToString();
+    public string? ClientId { get; set; } = null;
 
     public ICollection<string> Roles { get; set; } = new HashSet<string>();
 

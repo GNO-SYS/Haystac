@@ -45,7 +45,7 @@ public class CollectionsController : ControllerBase
     {
         if (dto.Identifier != id) return BadRequest($"Payload CollectionID doesn't match route CollectionID");
         
-        await _mediator.Send(new UpdateCollectionCommand { Dto = dto });
+        await _mediator.Send(new UpdateCollectionCommand { CollectionId = id, Dto = dto });
 
         return NoContent();
     }
@@ -62,8 +62,12 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet("{id}/items")]
-    public async Task<ActionResult<List<ItemDto>>> GetItemsForCollection(string id)
+    public async Task<ActionResult<ItemCollectionDto>> GetItemsForCollection(string id)
         => await _mediator.Send(new GetItemsByCollectionQuery { CollectionId = id });
+
+    [HttpGet("{id}/items/{itemId}")]
+    public async Task<ActionResult<ItemDto>> GetItemsForCollection(string id, string itemId)
+        => await _mediator.Send(new GetItemByIdentifierQuery { Collection = id, Identifier = itemId });
 
     [Authorize]
     [HttpPost("{id}/items/{itemId}")]
