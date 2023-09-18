@@ -9,12 +9,12 @@ public class CollectionRepository : ICollectionRepository
         _client = client;
     }
 
-    public async Task<Guid> CreateCollectionAsync(CollectionDto dto)
+    public async Task<Guid> CreateCollectionAsync(CollectionDto dto, bool isAnonymous = false)
     {
         var json = JsonSerializer.Serialize(dto);
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var route = $"{dto.Identifier}";
+        var route = $"{dto.Identifier}?anonymous={isAnonymous}";
         var response = await _client.PostAsync(route, requestContent);
         var responseBody = await response.Content.ReadAsStringAsync();
 

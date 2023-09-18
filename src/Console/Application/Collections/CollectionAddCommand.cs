@@ -7,6 +7,10 @@ public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
         [CommandArgument(0, "<JSONFILE>")]
         [Description("Path to input STAC Collection JSON file to be parsed")]
         public string JsonFile { get; set; } = string.Empty;
+
+        [CommandOption("-a|--anon")]
+        [DefaultValue(false)]
+        public bool Anonymous { get; set; }
     }
 
     private readonly ICollectionRepository _collections;
@@ -29,7 +33,7 @@ public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
 
         Helper.Write($"Attempting to create Collection: [yellow]{dto.Identifier.EscapeMarkup()}[/]");
 
-        var id = await _collections.CreateCollectionAsync(dto);
+        var id = await _collections.CreateCollectionAsync(dto, settings.Anonymous);
 
         Helper.Write($"\t - Created with UUID: [yellow]{id}[/]");
 

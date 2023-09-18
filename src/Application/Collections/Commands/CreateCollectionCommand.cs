@@ -3,6 +3,8 @@
 public record CreateCollectionCommand : IRequest<Guid>
 {
     public CollectionDto Dto { get; set; } = null!;
+
+    public bool Anonymous { get; set; } = false;
 }
 
 public class CreateCollectionCommandHandler 
@@ -23,7 +25,10 @@ public class CreateCollectionCommandHandler
     {
         var entity = command.Dto.ToCollection();
 
-        entity.ClientId = await _clients.GetClientIdAsync();
+        if (!command.Anonymous)
+        {
+            entity.ClientId = await _clients.GetClientIdAsync();
+        }
 
         entity.AddDomainEvent(new CollectionAddedEvent(entity));
 

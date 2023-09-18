@@ -29,11 +29,14 @@ public class CollectionsController : ControllerBase
 
     [Authorize]
     [HttpPost("{id}")]
-    public async Task<ActionResult<Guid>> CreateCollection([FromBody] CollectionDto dto, string id)
+    public async Task<ActionResult<Guid>> CreateCollection(
+        [FromBody] CollectionDto dto,
+        string id,
+        [FromQuery] bool anonymous = false)
     {
         if (dto.Identifier != id) return BadRequest($"Payload CollectionID doesn't match route CollectionID");
 
-        return await _mediator.Send(new CreateCollectionCommand { Dto = dto });
+        return await _mediator.Send(new CreateCollectionCommand { Dto = dto, Anonymous = anonymous });
     }
 
     [Authorize]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 using Npgsql;
@@ -21,6 +20,9 @@ public static class ConfigureServices
     {
         services.AddTransient<IDateTimeService, DateTimeService>();
         services.AddTransient<IClientService, ClientService>();
+
+        services.Configure<RootCatalogOptions>(configuration.GetSection(RootCatalogOptions.RootCatalog));
+        services.AddSingleton<IRootCatalogService, RootCatalogService>();
 
         //< TODO - Consider injecting an in-memory DB for testing
         var datasourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
