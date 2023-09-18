@@ -8,12 +8,16 @@ public class GetRootCatalogQueryHandler
     : IRequestHandler<GetRootCatalogQuery, RootCatalogDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IRootCatalogService _root;
     private readonly IUrlService _url;
 
-    public GetRootCatalogQueryHandler(IApplicationDbContext context,
-                                      IUrlService url)
+    public GetRootCatalogQueryHandler(
+        IApplicationDbContext context,
+        IRootCatalogService root,                                
+        IUrlService url)
     {
         _context = context;
+        _root = root;
         _url = url;
     }
 
@@ -26,13 +30,12 @@ public class GetRootCatalogQueryHandler
 
         var links = await GenerateLinks(collecs);
 
-        //< TODO - Change the StacVersion / ID / Title into configuration variables that are pulled in
         var dto = new RootCatalogDto
         {
-            StacVersion = "1.0.0",
-            Identifier = "haystac",
-            Title = "Root catalog for Haytstac API",
-            Description = "A descriptive message about the Haystac landing page",
+            StacVersion = _root.StacVersion,
+            Identifier = _root.Identifier,
+            Title = _root.Title,
+            Description = _root.Description,
             Type = "Catalog",
             ConformsTo = new List<string>
             {
@@ -71,14 +74,14 @@ public class GetRootCatalogQueryHandler
             },
             new Link
             {
-                Relationship = "self",
+                Relationship = "search",
                 Href = $"{baseUrl}/search",
                 Type = "application/geo+json",
                 Method = "GET"
             },
             new Link
             {
-                Relationship = "self",
+                Relationship = "search",
                 Href = $"{baseUrl}/search",
                 Type = "application/geo+json",
                 Method = "POST"
