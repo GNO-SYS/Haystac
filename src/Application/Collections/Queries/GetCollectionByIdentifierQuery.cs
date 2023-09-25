@@ -12,13 +12,16 @@ public class GetCollectionByIdentifierQueryHandler
 {
     private readonly IApplicationDbContext _context;
     private readonly IClientService _clients;
+    private readonly ILinkService _links;
 
     public GetCollectionByIdentifierQueryHandler(
         IApplicationDbContext context,
-        IClientService clients)
+        IClientService clients,
+        ILinkService links)
     {
         _context = context;
         _clients = clients;
+        _links = links;
     }
 
     public async Task<CollectionDto> Handle(GetCollectionByIdentifierQuery query,
@@ -34,6 +37,8 @@ public class GetCollectionByIdentifierQueryHandler
             throw new NotFoundException(nameof(Collection), query.CollectionId);
         }
 
-        return entity.ToDto();
+        var links = await _links.GenerateCollectionLinks(entity);
+
+        return entity.ToDto(links);
     }
 }

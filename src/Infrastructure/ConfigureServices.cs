@@ -18,8 +18,10 @@ public static class ConfigureServices
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IDateTimeService, DateTimeService>();
         services.AddTransient<IClientService, ClientService>();
+        services.AddTransient<IConformanceService, ConformanceService>();
+        services.AddTransient<IDateTimeService, DateTimeService>();
+        services.AddTransient<ILinkService, LinkService>();
 
         services.Configure<RootCatalogOptions>(configuration.GetSection(RootCatalogOptions.RootCatalog));
         services.AddSingleton<IRootCatalogService, RootCatalogService>();
