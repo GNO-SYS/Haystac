@@ -10,13 +10,16 @@ public class GetItemsByCollectionQueryHandler : IRequestHandler<GetItemsByCollec
 {
     private readonly IApplicationDbContext _context;
     private readonly IClientService _clients;
+    private readonly ILinkService _links;
 
     public GetItemsByCollectionQueryHandler(
         IApplicationDbContext context,
-        IClientService clients)
+        IClientService clients,
+        ILinkService links)
     {
         _context = context;
         _clients = clients;
+        _links = links;
     }
 
     public async Task<ItemCollectionDto> Handle(GetItemsByCollectionQuery query, CancellationToken cancellationToken)
@@ -32,13 +35,26 @@ public class GetItemsByCollectionQueryHandler : IRequestHandler<GetItemsByCollec
             throw new NotFoundException(nameof(Collection), query.CollectionId);
         }
 
+        var links = await _links.GenerateItemCollectionLinks(collec);
+
+        var tasks = collec.Items.Select(i => MapItemDto(collec, i));
+        var dtos = await Task.WhenAll(tasks);
+
         var dto = new ItemCollectionDto
         {
-            Features = collec.Items.Select(i => i.ToDto()).ToList(),
+            Features = dtos.ToList(),
             NumberMatched = collec.Items.Count,
-            NumberReturned = collec.Items.Count
+            NumberReturned = collec.Items.Count,
+            Links = links
         };
 
         return dto;
+    }
+
+    async Task<ItemDto> MapItemDto(Collection collec, Item item)
+    {
+        var links = await _links.GenerateItemLinks(collec, item);
+
+        return item.ToDto(links);
     }
 }

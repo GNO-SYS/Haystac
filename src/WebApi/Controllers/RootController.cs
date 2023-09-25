@@ -1,4 +1,5 @@
 ﻿using Haystac.Application.Catalogs.Queries;
+using Haystac.Application.Conformance.Queries;
 
 namespace Haystac.WebApi.Controllers;
 
@@ -17,6 +18,9 @@ public class RootController : ControllerBase
     public async Task<ActionResult<RootCatalogDto>> GetRootCatalog()
         => await _mediator.Send(new GetRootCatalogQuery());
 
-    //< TODO - Actually complete the 'GetRootCatalogQueryHandler'
+    [HttpGet("conformance")]
+    public async Task<ActionResult<ConformanceDto>> GetConformance()
+        => await _mediator.Send(new GetConformanceClassesQuery());
+
     //< TODO - Add the [HttpGet("api")] route & handler
 }

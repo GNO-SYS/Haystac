@@ -54,7 +54,8 @@ public class CollectionDto
 
 public static class CollectionDtoExtensions
 {
-    public static CollectionDto ToDto(this Collection collection)
+    public static CollectionDto ToDto(this Collection collection,
+        List<Link>? links = null)
     {
         return new CollectionDto
         {
@@ -69,7 +70,7 @@ public static class CollectionDtoExtensions
             Providers = collection.Providers,
             Extent = collection.Extent,
             Summaries = collection.Summaries,
-            Links = collection.Links,
+            Links = links ?? collection.Links,
             Assets = collection.Assets
         };
     }

@@ -20,7 +20,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<CollectionDto>>> GetCollections()
+    public async Task<ActionResult<CollectionListDto>> GetCollections()
         => await _mediator.Send(new GetAllCollectionsQuery());
 
     [HttpGet("{id}")]

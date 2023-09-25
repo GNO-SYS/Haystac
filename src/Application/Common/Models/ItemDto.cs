@@ -44,7 +44,7 @@ public class ItemDto
 
 public static class ItemDtoExtensions
 {
-    public static ItemDto ToDto(this Item item)
+    public static ItemDto ToDto(this Item item, List<Link>? links = null)
     {
         return new ItemDto
         {
@@ -52,7 +52,7 @@ public static class ItemDtoExtensions
             Extensions = item.Extensions,
             Identifier = item.Identifier,
             Properties = item.Properties,
-            Links = item.Links,
+            Links = links ?? item.Links,
             Assets = item.Assets,
             Collection = item.CollectionIdentifier,
             Geometry = item.Geometry

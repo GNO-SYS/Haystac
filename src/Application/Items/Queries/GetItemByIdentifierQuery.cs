@@ -14,13 +14,16 @@ public class GetItemByIdentifierQueryHandler
 {
     private readonly IApplicationDbContext _context;
     private readonly IClientService _clients;
+    private readonly ILinkService _links;
 
     public GetItemByIdentifierQueryHandler(
         IApplicationDbContext context,
-        IClientService clients)
+        IClientService clients,
+        ILinkService links)
     {
         _context = context;
         _clients = clients;
+        _links = links;
     }
 
     public async Task<ItemDto> Handle(GetItemByIdentifierQuery query,
@@ -41,6 +44,8 @@ public class GetItemByIdentifierQueryHandler
 
         if (item == null) throw new NotFoundException(nameof(Item), query.Identifier);
 
-        return item.ToDto();
+        var links = await _links.GenerateItemLinks(collec, item);
+
+        return item.ToDto(links);
     }
 }
