@@ -22,14 +22,14 @@ public class CollectionListCommand : AsyncCommand<CollectionListCommand.Settings
 
         Helper.Write("Fetching collections..");
         var collecs = await _collections.GetAllCollectionsAsync();
-        Helper.Write($" - Done! Found [yellow]{collecs.Count}[/] Collections");
+        Helper.Write($" - Done! Found [yellow]{collecs.Dtos.Count}[/] Collections");
 
         var table = new Table();
         table.AddColumn("Name");
         table.AddColumn("Type");
         table.AddColumn("Description");
 
-        foreach (var collec in collecs)
+        foreach (var collec in collecs.Dtos)
         {
             table.AddRow(collec.Identifier, $"[yellow]{collec.Type}[/]", collec.Description);
         }

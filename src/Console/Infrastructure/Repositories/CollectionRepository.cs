@@ -26,7 +26,7 @@ public class CollectionRepository : ICollectionRepository
         return JsonSerializer.Deserialize<Guid>(responseBody);
     }
 
-    public async Task<List<CollectionDto>> GetAllCollectionsAsync()
+    public async Task<CollectionListDto> GetAllCollectionsAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "");
 
@@ -38,7 +38,7 @@ public class CollectionRepository : ICollectionRepository
             throw new Exception($"ERROR: [{response.StatusCode}] {responseBody ?? ""}");
         }
 
-        var dtos = JsonSerializer.Deserialize<List<CollectionDto>>(responseBody);
+        var dtos = JsonSerializer.Deserialize<CollectionListDto>(responseBody);
         if (dtos == null) throw new Exception($"Failed to deserialize response: {responseBody}");
 
         return dtos;

@@ -26,7 +26,6 @@ public class CollectionAddCommand : AsyncCommand<CollectionAddCommand.Settings>
     {
         Helper.WriteDivider($"Adding Collection from JSON");
 
-        //< TODO - Add 'AuthenticationService' that caches a local JWT, and manages access to these commands
         Helper.Write($"Creating Collection from: [yellow]{Helper.GetEscapedFileName(settings.JsonFile)}[/]");
 
         var dto = await _json.ParseFromFile<CollectionDto>(settings.JsonFile);
