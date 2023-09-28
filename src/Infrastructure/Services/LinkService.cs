@@ -188,4 +188,21 @@ public class LinkService : ILinkService
 
         return Task.FromResult(links);
     }
+
+    public Task<List<Link>> GenerateSearchQueryLinks()
+    {
+        var baseUrl = _url.GetBaseUrl();
+
+        var links = new List<Link>
+        {
+            new Link
+            {
+                Relationship = "root",
+                Href = $"{baseUrl}/",
+                Type = "application/json"
+            }
+        };
+
+        return Task.FromResult(links);
+    }
 }

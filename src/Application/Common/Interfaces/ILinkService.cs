@@ -4,6 +4,8 @@ namespace Haystac.Application.Common.Interfaces;
 
 public interface ILinkService
 {
+    Task<List<Link>> GenerateSearchQueryLinks();
+
     Task<List<Link>> GenerateRootCatalogLinks(IEnumerable<Collection> collecs);
 
     Task<List<Link>> GenerateCollectionLinks(Collection collec);

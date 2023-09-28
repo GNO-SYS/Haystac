@@ -55,6 +55,8 @@ public record SearchQuery : IRequest<ItemCollectionDto>
         return new Polygon(new LinearRing(coords));
     }
 
+    public TemporalRange? GetTemporalRange() => TemporalRange.Generate(this);
+
     static Coordinate[] GetCoordinates(List<double> bbox)
     {
         bool is3D = bbox.Count > 4;
@@ -80,13 +82,16 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, ItemCollectionDto
 {
     private readonly IApplicationDbContext _context;
     private readonly IClientService _clients;
+    private readonly ILinkService _links;
 
     public SearchQueryHandler(
         IApplicationDbContext context,
-        IClientService clients)
+        IClientService clients,
+        ILinkService links)
     {
         _context = context;
         _clients = clients;
+        _links = links;
     }
 
     public async Task<ItemCollectionDto> Handle(SearchQuery query, CancellationToken cancellationToken)
@@ -97,15 +102,18 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, ItemCollectionDto
 
         var filtered =  await _clients.FilterCollectionsAsync(collecs);
 
+        //< TODO - Add actual paging - the STAC paging mechanism.. hurts
         var items = await GetMatchingItemsAsync(filtered, query);
 
-        //< TODO - Add actual paging - the STAC paging mechanism.. hurts
+        //< TODO - Add paging metadata to links here
+        var links = await _links.GenerateSearchQueryLinks();
 
         var res = new ItemCollectionDto
         {
             Features = items.Select(i => i.ToDto()).ToList(),
             NumberMatched = items.Count(),
-            NumberReturned = items.Count()
+            NumberReturned = items.Count(),
+            Links = links
         };
 
         return res;
@@ -117,8 +125,7 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, ItemCollectionDto
 
         var items = await Task.WhenAll(tasks);
 
-        return items.Where(i => i.Any())
-                    .SelectMany(i => i);
+        return items.Where(i => i.Any()).SelectMany(i => i);
     }
 
     static Task<List<Item>> FilterItemsAsync(Collection collec, SearchQuery query)
@@ -129,6 +136,9 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, ItemCollectionDto
         }
 
         var poly = query.GetBoundingPolygon();
+        var itemIds = query.ItemIds?.ToHashSet();
+        var temporal = query.GetTemporalRange();
+
         var items = new List<Item>();
 
         foreach (var item in collec.Items)
@@ -138,13 +148,17 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, ItemCollectionDto
                 continue;
             }
 
-            if (query.ItemIds != null && !query.ItemIds.Contains(item.Identifier))
+            if (itemIds != null && !itemIds.Contains(item.Identifier))
             {
                 continue;
             }
 
-            //< TODO - Add temporal search
-
+            if (temporal != null)
+            {
+                var itemRange = TemporalRange.Generate(item);
+                if (itemRange != null && !temporal.Touches(itemRange)) continue;
+            }
+            
             items.Add(item);
         }
 
